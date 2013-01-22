@@ -12,7 +12,7 @@ void setup() {
   // Start the connection with the Laptop, for debugging only!
   //Serial.begin(115200);
   if (!rf22.init())
-  Serial.println("RF22 init failed");
+  	Serial.println("RF22 init failed");
 }
 
 
