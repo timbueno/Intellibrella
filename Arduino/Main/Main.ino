@@ -14,6 +14,9 @@ void setup()  {
   Serial.begin(9600);
   if (!rf22.init())
     Serial.println("RF22 init failed");
+
+// TODO: Run Rx once to check if inside or outside?
+
 }
 
 void rx() {
@@ -53,12 +56,12 @@ void rx() {
 
 void loop() {
 
-  // TODO: Replace with while not during quiet hours
+  // TODO: Replace with while (!during quiet hours)
   while (1) {
 
     if (!outSideTheHouse)
     {
-      // Replace this with subtraction of "savedTime" from current time
+      // TODO: Replace this with subtraction of "savedTime" from current time
       int wirelessDelay = 10000;
       unsigned long endWirelessDelay = millis() + wirelessDelay;
       while (millis() < endWirelessDelay)
@@ -70,7 +73,7 @@ void loop() {
 
     if (outSideTheHouse)
     {
-      // Replace this with subtraction of "savedTime" from current time
+      // TODO: Replace this with subtraction of "savedTime" from current time
       int wirelessDelay = 10000;
       unsigned long endWirelessDelay = millis() + wirelessDelay;
       while (millis() < endWirelessDelay)
