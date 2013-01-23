@@ -6,7 +6,7 @@ import time
 # rot13 = string.maketrans( 
 #     "ABCDEFGHIJKLMabcdefghijklmNOPQRSTUVWXYZnopqrstuvwxyz", 
 #     "NOPQRSTUVWXYZnopqrstuvwxyzABCDEFGHIJKLMabcdefghijklm")
-msg = ":kgfdhhjghhjkdfgjkjfdghjdfdsfafsdffdsdfdsafdfffdss@"
+msg = ":4,0123456,5,34325326@"
 ser = serial.Serial("/dev/ttyAMA0",9600)
 # ser.open()
 
