@@ -13,12 +13,12 @@ ser = serial.Serial("/dev/ttyAMA0",9600)
 try:
 	while 1 :
 		sent = ser.write(msg)
-		print "sent: "
-		print sent
+		print "Sent: ", sent
+		# print sent
 		try:
-			receive = ser.read(len(msg))
-			print "receive: " 
-			print receive
+			receive = ser.readline()
+			print "Received: ", receive 
+			# print receive
 		except:
 			pass
 		time.sleep(1)

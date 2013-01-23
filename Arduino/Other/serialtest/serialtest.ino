@@ -41,34 +41,36 @@ void serialEvent() {
   }
 }
 
-void printValues(String str) {
+void Transmit(String str) {
 
+  // Create byte array of message string
   uint8_t bytes[str.length() + 1];
-
-  Serial.print("Size: ");
-  Serial.print(sizeof(bytes));
-  Serial.print("\n");
-
   str.getBytes(bytes, str.length()+1);
 
-  Serial.print("Bytes: ");
-  for(int i=0; i<str.length()+1; i++){
-    Serial.print("[");
-    Serial.print(bytes[i]);
-    Serial.print("]");
-  }
+  // Serial.print("Size: ");
+  // Serial.print(sizeof(bytes));
+  // Serial.print("\n");
+
+  // Serial.print("Bytes: ");
+  // for(int i=0; i<str.length()+1; i++){
+  //   Serial.print("[");
+  //   Serial.print(bytes[i]);
+  //   Serial.print("]");
+  // }
+
+  // Serial.println("1");
 
   // Transmit wireless
   if (!rf22.setFrequency(434.0))
-    Serial.println("setFrequency failed");
+    Serial.print("setFrequency failed");
   if (!rf22.setModemConfig(RF22::GFSK_Rb2Fd5))
-    Serial.println("setModemConfig failed");
+    Serial.print("setModemConfig failed");
   rf22.send(bytes, sizeof(bytes));
   rf22.waitPacketSent();
   // Serial.println("-------------");
 
-  Serial.print("\n");
-  Serial.print("\n");
+  // Serial.print("\n");
+  // Serial.print("\n");
 }
 
 void handleCmd() {
@@ -80,7 +82,7 @@ void handleCmd() {
   Serial.println(cmd);
 
   // Transfer the command via wireless here
-  printValues(cmd);
+  Transmit(cmd);
 
   // Reset command finished flag
   cmdDone = false;
