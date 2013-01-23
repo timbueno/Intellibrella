@@ -1,9 +1,13 @@
 #include <SPI.h>
 #include <RF22.h>
+#include <RTC_DS3234.h>
+#include <RTClib.h>
+#include <ADXL335.h>
+
 // Singleton instance of the radio
 RF22 rf22;
-boolean checkForNewData = true;
-int time
+boolean outSideTheHouse = false;
+int savedTime;
 
 void setup()  {
   
@@ -14,7 +18,7 @@ void setup()  {
 
 void rx() {
   // Wireless timeout in milliseconds
-  uint16_t timeout = 10000;
+  uint16_t timeout = 3000;
 
   if (!rf22.setFrequency(434.0))
     Serial.println("setFrequency failed");
@@ -28,19 +32,20 @@ void rx() {
     Serial.println("recv 1 failed");
   
   rf22.waitAvailableTimeout(timeout);
-  
-  if (rf22.recv(buf, &len) && checkForNewData)
+  if (rf22.recv(buf, &len))
   {
      Serial.print("got one in user: ");
      Serial.println((char*)buf);
-     checkForNewData = false;
-     // GET THE TIME FOR WHEN THE DATA WAS RECIEVED
+     outSideTheHouse = false;
+     // TODO: Get the time from the real time clock
      // Placeholder:
-     time = 1358904325; // About 8:27PM EST
+     savedTime = 1358904325; // About 8:27PM EST
   }
   else
   {
      Serial.println("recv 2 failed");
+     outSideTheHouse = true;
+     savedTime = 1358904325; // About 8:27PM EST
   }
 
 }
@@ -48,25 +53,32 @@ void rx() {
 
 void loop() {
 
-  // While not during quiet hours
+  // TODO: Replace with while not during quiet hours
   while (1) {
 
-    if (checkForNewData = false)
+    if (!outSideTheHouse)
     {
+      // Replace this with subtraction of "savedTime" from current time
+      int wirelessDelay = 10000;
+      unsigned long endWirelessDelay = millis() + wirelessDelay;
+      while (millis() < endWirelessDelay)
+      { 
+        Serial.println("You are inside the house");
+      }
+      rx();
+    }
+
+    if (outSideTheHouse)
+    {
+      // Replace this with subtraction of "savedTime" from current time
       int wirelessDelay = 10000;
       unsigned long endWirelessDelay = millis() + wirelessDelay;
       while (millis() < endWirelessDelay)
       {
-        // Main 
+        Serial.println("You are outside the house");
       }
-
+      rx();
     }
-
-    checkForNewData = true;
-    rx();
-
-  // {
-
-  // delay using millis()
-
+  
+  }
 }
