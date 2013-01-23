@@ -6,7 +6,7 @@ import time
 # rot13 = string.maketrans( 
 #     "ABCDEFGHIJKLMabcdefghijklmNOPQRSTUVWXYZnopqrstuvwxyz", 
 #     "NOPQRSTUVWXYZnopqrstuvwxyzABCDEFGHIJKLMabcdefghijklm")
-msg = ":test from raspberry pi this is more test to make this a longer string@\n"
+msg = ":kgfdhhjghhjkdfgjkjfdghjdfdsfafsdffdsdfdsafdfffdss@"
 ser = serial.Serial("/dev/ttyAMA0",9600)
 # ser.open()
 
