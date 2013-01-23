@@ -29,7 +29,7 @@ try:
 		except:
 			print "Problem Receiving with Arduino"
 
-		print "--------------------------"
+		print "--------------------------\n"
 		time.sleep(1)
 
     
