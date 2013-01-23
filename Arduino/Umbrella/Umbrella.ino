@@ -9,7 +9,7 @@ RF22 rf22;
 boolean outSideTheHouse = false;
 int savedTime;
 
-void setup()  {
+void setup() {
   
   Serial.begin(9600);
   if (!rf22.init())
@@ -82,6 +82,5 @@ void loop() {
       }
       rx();
     }
-  
   }
 }
