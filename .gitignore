@@ -1,3 +1,7 @@
 venv
 *.pyc
 .DS_Store
+/Arduino/Umbrella/*
+!/Arduino/Umbrella/*.ino
+
+

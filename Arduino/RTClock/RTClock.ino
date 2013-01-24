@@ -12,9 +12,14 @@
 #define PSTR(s) (__extension__({static prog_char __c[] PROGMEM = (s); &__c[0];}))
 
 // Create an RTC instance, using the chip select pin it's connected to
-RTC_DS3234 RTC(8);
+RTC_DS3234 RTC(9);
+
+int wirelesspin = 10;
 
 void setup () {
+    pinMode(wirelesspin, OUTPUT);
+    digitalWrite(wirelesspin, HIGH);
+
     Serial.begin(9600);
     Serial.println("RTClib/examples/ds3234/");
     SPI.begin();
@@ -29,6 +34,7 @@ void setup () {
     // following line sets the RTC to the date & time this sketch was compiled
     RTC.adjust(DateTime(__DATE__, __TIME__));
   }
+  //RTC.adjust(DateTime(__DATE__, __TIME__));
 }
 
 void loop () {

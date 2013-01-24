@@ -3,26 +3,36 @@
 import serial
 import time
 
+from datetime import datetime
+
 # rot13 = string.maketrans( 
 #     "ABCDEFGHIJKLMabcdefghijklmNOPQRSTUVWXYZnopqrstuvwxyz", 
 #     "NOPQRSTUVWXYZnopqrstuvwxyzABCDEFGHIJKLMabcdefghijklm")
-msg = ":test from raspberry pi this is more test to make this a longer string@\n"
+msg = ":4,0123456,5,34325326@"
 ser = serial.Serial("/dev/ttyAMA0",9600)
 # ser.open()
 
 try:
 	while 1 :
-		sent = ser.write(msg)
-		print "sent: "
-		print sent
+		print "Time: ", datetime.now().strftime("%m/%d/%Y %H:%M:%S") 
+
+		# Send message to transmission arduino
 		try:
-			receive = ser.read(len(msg))
-			print "receive: " 
-			print receive
+			sent = ser.write(msg)
+			print "Sent: ", sent
 		except:
-			pass
+			print "Problem Sending with Arduino"
+
+		try:
+			receive = ser.readline()
+			print "Received: ", receive 
+		except:
+			print "Problem Receiving with Arduino"
+
+		print "--------------------------\n"
 		time.sleep(1)
 
     
 except KeyboardInterrupt:
+	print "Quit with Keyboard Interrupt"
 	ser.close()
