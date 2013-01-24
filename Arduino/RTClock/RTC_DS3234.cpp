@@ -49,6 +49,8 @@ uint8_t RTC_DS3234::begin(void)
     SPI.transfer(CONTROL_STATUS_W);
     SPI.transfer(0x0);
     cs(HIGH);
+
+    SPI.setDataMode(SPI_MODE0);
     delay(1);
 
     return 1;
@@ -56,7 +58,11 @@ uint8_t RTC_DS3234::begin(void)
 
 void RTC_DS3234::cs(int _value)
 {
-    SPI.setDataMode(SPI_MODE1);
+    // Serial.print(_value);
+    if(_value == 0)
+        SPI.setDataMode(SPI_MODE1);
+    else
+        SPI.setDataMode(SPI_MODE0);
     digitalWrite(cs_pin,_value);
 }
 
