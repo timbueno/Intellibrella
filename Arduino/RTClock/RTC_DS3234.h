@@ -14,6 +14,11 @@ public:
     uint8_t begin(void);
     void adjust(const DateTime& dt);
     uint8_t isrunning(void);
+
+    void clearflags();
+    void setA1(uint8_t s, uint8_t mi, uint8_t h, uint8_t d, bool * flags);
+    void setA2(uint8_t mi, uint8_t h, uint8_t d, bool * flags);
+
     DateTime now();
 
 protected:
