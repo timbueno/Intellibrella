@@ -35,12 +35,14 @@ uint8_t RTC_DS3234::begin(void)
 
     //Ugh!  In order to get this to interop with other SPI devices,
     //This has to be done in cs()
-    SPI.setDataMode(SPI_MODE1);
+    //SPI.setDataMode(SPI_MODE1);
 
     //Enable oscillator, disable square wave, alarms
     cs(LOW);
     SPI.transfer(CONTROL_W);
-    SPI.transfer(0x0);
+    // SPI.transfer(0x0); // Enable Oscillator only
+    // SPI.transfer(0x06); // Enable Oscillator, Interrupts and Alarm 2
+    SPI.transfer(0x05); // Enable Oscillator, Interrupts and Alarm 1
     cs(HIGH);
     delay(1);
 
@@ -50,7 +52,7 @@ uint8_t RTC_DS3234::begin(void)
     SPI.transfer(0x0);
     cs(HIGH);
 
-    SPI.setDataMode(SPI_MODE0);
+    //SPI.setDataMode(SPI_MODE0);
     delay(1);
 
     return 1;
@@ -58,12 +60,74 @@ uint8_t RTC_DS3234::begin(void)
 
 void RTC_DS3234::cs(int _value)
 {
-    // Serial.print(_value);
     if(_value == 0)
         SPI.setDataMode(SPI_MODE1);
     else
         SPI.setDataMode(SPI_MODE0);
     digitalWrite(cs_pin,_value);
+}
+
+void RTC_DS3234::clearflags()
+{
+    cs(LOW);
+    SPI.transfer(CONTROL_STATUS_W);
+    SPI.transfer(0x0);
+    cs(HIGH);
+}
+
+// flags are: A1M1 (seconds), A1M2 (minutes), A1M3 (hour), 
+// A1M4 (day) 0 to enable, 1 to disable, DY/DT (dayofweek == 1/dayofmonth == 0)
+void RTC_DS3234::setA1(uint8_t s, uint8_t mi, uint8_t h, uint8_t d, bool * flags)
+{
+    uint8_t t[4] = {s, mi, h, d};
+    uint8_t i;
+
+    for(i = 0; i <= 3; i++){
+        cs(LOW);
+        SPI.transfer(i + 0x87);
+        if(i == 3){
+            SPI.transfer(bin2bcd(t[3]) | (flags[3] << 7) | (flags[4] << 6));
+        }
+        else{
+            SPI.transfer(bin2bcd(t[i]) | (flags[i] << 7));
+        }
+        cs(HIGH);
+    }
+}
+
+// void DS3234_set_a1(uint8_t pin, uint8_t s, uint8_t mi, uint8_t h, uint8_t d, boolean * flags)
+// {
+//     uint8_t t[4] = { s, mi, h, d };
+//     uint8_t i;
+
+//     for (i = 0; i <= 3; i++) {
+//         digitalWrite(pin, LOW);
+//         SPI.transfer(i + 0x87);
+//         if (i == 3) {
+//             SPI.transfer(dectobcd(t[3]) | (flags[3] << 7) | (flags[4] << 6));
+//         } else
+//             SPI.transfer(dectobcd(t[i]) | (flags[i] << 7));
+//         digitalWrite(pin, HIGH);
+//     }
+// }
+
+// flags are: A2M2 (minutes), A2M3 (hour), A2M4 (day) 0 to enable, 1 to disable, DY/DT (dayofweek == 1/dayofmonth == 0) 
+void RTC_DS3234::setA2(uint8_t mi, uint8_t h, uint8_t d, bool * flags)
+{
+    uint8_t t[3] = {mi, h, d};
+    uint8_t i;
+
+    for(i = 0; i<=2; i++){
+        cs(LOW);
+        SPI.transfer(i + 0x8B);
+        if (i == 2){
+            SPI.transfer(bin2bcd(t[2]) | (flags[2] << 7) | (flags[3] << 6));
+        }
+        else{
+            SPI.transfer(bin2bcd(t[i]) | (flags[i] << 7));
+        }
+        cs(HIGH);
+    }
 }
 
 uint8_t RTC_DS3234::isrunning(void)
