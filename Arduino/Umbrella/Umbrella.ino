@@ -8,25 +8,27 @@
 int greenLED = 7;
 int redLED = 8;
 int ssRTC = 9;
+int state = HIGH;
 
 // Important Variables
 boolean outSideTheHouse = false;
 int savedTime;
 
 // Singleton instance of the radio
-// and related global variabls
+// and related global variables
 RF22 rf22;
-bool checkRF = false; // set inside interrupt 
+bool checkRF = true; // true so check for rf on bootup 
 
 // Instance of the Real Time Clock
 // and related global variables
 RTC_DS3234 RTC(ssRTC);
 volatile const uint8_t incrementstowait = 10; // seconds (A1), minutes (A2)  
-volatile uint8_t increments = 0;
+volatile int8_t increments = 0;
 
 ////////////////////////////////////////////////////////////////////////////////
 // Setup
 void setup() {
+
   SPI.begin();
 
   pinMode(greenLED, OUTPUT);
@@ -37,31 +39,35 @@ void setup() {
   if (!rf22.init())
     Serial.println("RF22 init failed");
 
-  // Initialize clock and set the timer
+  // Initialize clock and set the alarm.
+  // Make sure to change the control register in RTC_DS3234.cpp
+  // for the appropriate alarm.
   RTC.begin();
   bool flags[5] = {1, 1, 1, 1, 1}; // Alarm every second
   RTC.setA1(1, 1, 1, 1, flags); // Alarm 1
   // bool flags[4] = {1, 1, 1, 0}; // Alarm every minute
   // RTC.setA2(1, 1, 1, flags);  // Alarm 2
+
+  // Interrupt for the RTC 
   attachInterrupt(1, HandleInterrupt, LOW);
-
-
-// TODO: Run Rx once to check if inside or outside?
-
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 // Receive data from wireless function
 void HandleInterrupt(){
-  // SPI.begin();
   RTC.clearflags();
+
+  // Toggle light
+  // Remove this at some point
+  // state = !state;
+  // digitalWrite(greenLED, state);
+
+
+  increments = increments+1;
+  
   if(increments == incrementstowait){
     checkRF = true;
-    increments = 1;
-  }
-  else{
-    increments = increments+1;
-    checkRF = false;
+    increments = 0;
   }
 }
 
@@ -111,69 +117,50 @@ void rx() {
 ////////////////////////////////////////////////////////////////////////////////
 // Home 
 void Home(){
+  Serial.println("You are inside the house");
+
+  // Print the Time
   const int len = 32;
   static char buf[len];
-
-  // TODO: Replace this with subtraction of "savedTime" from current time
-  // int wirelessDelay = 10;
-  // unsigned long endWirelessDelay = millis() + wirelessDelay;
-  // DateTime then = RTC.now();
-  // Serial.println("You are inside the house");
-
-  // unsigned long endWirelessDelay = now.unixtime();
-  // DateTime now;
-  // do{
-  //     now = RTC.now();
-  //     delay(100);
-  //     // Serial.println(now.toString(buf,len));
-  // }while (now.unixtime() - then.unixtime() < wirelessDelay);
-  // Serial.println("Starting WIRELESS");
-  // rx();
-
-  Serial.println("You are inside the house");
   DateTime now = RTC.now();
   Serial.println(now.toString(buf,len));
-      
+
+  // Serial.print("Increments: ");
+  // Serial.println(increments);
+  // Serial.print("CheckRF: ");
+  // Serial.println(checkRF);
   if(checkRF){
     Serial.println("Starting WIRELESS");
+    detachInterrupt(1);
     rx();
+    attachInterrupt(1, HandleInterrupt, LOW);
     checkRF = false;
   }
-
   delay(1000);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 // Away
 void Away(){
+  Serial.println("You are outside the house");
+
+  // Print the Time
   const int len = 32;
   static char buf[len];
-
-  // // TODO: Replace this with subtraction of "savedTime" from current time
-  // int wirelessDelay = 10;
-  // // unsigned long endWirelessDelay = millis() + wirelessDelay;
-  // DateTime then = RTC.now();
-  // // unsigned long endWirelessDelay = now.unixtime();
-  // Serial.println("You are outside the house");
-  // DateTime now;
-  // do{ 
-  //     now = RTC.now();
-  //     delay(100);
-  //     // Serial.println(now.toString(buf,len));
-  //   }while (now.unixtime() - then.unixtime() < wirelessDelay);
-  // Serial.println("Starting WIRELESS");
-  // rx();  
-
-  Serial.println("You are outside the house");
   DateTime now = RTC.now();
   Serial.println(now.toString(buf, len));
 
+  // Serial.print("Increments: ");
+  // Serial.println(increments);
+  // Serial.print("CheckRF: ");
+  // Serial.println(checkRF);
   if(checkRF){
     Serial.println("Starting WIRELESS");
+    detachInterrupt(1);
     rx();
+    attachInterrupt(1, HandleInterrupt, LOW);
     checkRF = false;
   }
-
   delay(1000);
 }
 
@@ -187,49 +174,11 @@ void loop() {
     if (!outSideTheHouse)
     {
       Home();      
-      // const int len = 32;
-      // static char buf[len];
-
-      // Print current time
-      // DateTime now = RTC.now();
-      // Serial.println(now.toString(buf,len));
-
-      // TODO: Replace this with subtraction of "savedTime" from current time
-      // int wirelessDelay = 10;
-      // // unsigned long endWirelessDelay = millis() + wirelessDelay;
-      // DateTime then = RTC.now();
-      // Serial.println("You are inside the house");
-      // // unsigned long endWirelessDelay = now.unixtime();
-      // DateTime now;
-      // do
-      // { 
-      //   now = RTC.now();
-      //   // Serial.println(now.toString(buf,len));
-      // }while (now.unixtime() - then.unixtime() < wirelessDelay);
-      // Serial.println("Starting WIRELESS");
-      // rx();
     }
 
     if (outSideTheHouse)
     {
       Away();
-      // const int len = 32;
-      // static char buf[len];
-
-      // TODO: Replace this with subtraction of "savedTime" from current time
-      // int wirelessDelay = 10;
-      // // unsigned long endWirelessDelay = millis() + wirelessDelay;
-      // DateTime then = RTC.now();
-      // // unsigned long endWirelessDelay = now.unixtime();
-      // Serial.println("You are outside the house");
-      // DateTime now;
-      // do 
-      // { 
-      //   now = RTC.now();
-      //   // Serial.println(now.toString(buf,len));
-      // }while (now.unixtime() - then.unixtime() < wirelessDelay);
-      // Serial.println("Starting WIRELESS");
-      // rx();
     }
   }
 }
