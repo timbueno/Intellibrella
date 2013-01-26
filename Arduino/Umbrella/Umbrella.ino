@@ -6,8 +6,12 @@
 #include "DataTypes.h"
 
 // Integer Values to Hold Used Pins
-int greenLED = 7;
 int redLED = 8;
+int greenLED = 7;
+int blueLED = 6;
+
+int statusLED = 5;
+
 int ssRTC = 9;
 int state = HIGH;
 
@@ -73,61 +77,6 @@ void HandleInterrupt(){
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-// Receive data from wireless function
-String rx() {
-  // Remove Interrupt on the RTC
-  detachInterrupt(1);
-
-  // String
-  String data = "0";
-  // Wireless timeout in milliseconds
-  uint16_t timeout = 3000;
-
-  if (!rf22.setFrequency(434.0))
-    Serial.println("setFrequency failed");
-  if (!rf22.setModemConfig(RF22::GFSK_Rb2Fd5))
-    Serial.println("setModemConfig failed");
-  
-
-  uint8_t buf[RF22_MAX_MESSAGE_LEN];
-  uint8_t len = sizeof(buf);
-  if (rf22.recv(buf, &len)) // Should fail, no message available
-    Serial.println("recv 1 failed");
-  
-  rf22.waitAvailableTimeout(timeout);
-  if (rf22.recv(buf, &len))
-  {
-     Serial.print("got one in user: ");
-     // Serial.println((char*)buf);
-     outSideTheHouse = false;
-     data = (char*)buf;
-     // Serial.println(data);
-
-
-     // Set LED
-     digitalWrite(redLED, HIGH);
-
-     // TODO: Get the time from the real time clock
-     // Placeholder:
-     savedTime = 1358904325; // About 8:27PM EST
-  }
-  else
-  {
-     Serial.println("recv 2 failed");
-     outSideTheHouse = true;
-     // Set LED
-     digitalWrite(redLED, LOW);
-
-     savedTime = 1358904325; // About 8:27PM EST
-  }
-
-  // Reattach Interrupt on the RTC
-  attachInterrupt(1, HandleInterrupt, LOW);
-
-  return data;
-}
-
-////////////////////////////////////////////////////////////////////////////////
 // Handle the incoming data
 Command HandleIncommingData(String dataString){
 
@@ -164,11 +113,91 @@ Command HandleIncommingData(String dataString){
 
 }
 
+////////////////////////////////////////////////////////////////////////////////
+// Receive data from wireless function
+String rx() {
+  // Remove Interrupt on the RTC
+  detachInterrupt(1);
+
+  // String
+  String data = "0";
+  // Wireless timeout in milliseconds
+  uint16_t timeout = 3000;
+
+  if (!rf22.setFrequency(434.0))
+    Serial.println("setFrequency failed");
+  if (!rf22.setModemConfig(RF22::GFSK_Rb2Fd5))
+    Serial.println("setModemConfig failed");
+  
+
+  uint8_t buf[RF22_MAX_MESSAGE_LEN];
+  uint8_t len = sizeof(buf);
+  if (rf22.recv(buf, &len)) // Should fail, no message available
+    Serial.println("recv 1 failed");
+  
+  rf22.waitAvailableTimeout(timeout);
+  if (rf22.recv(buf, &len))
+  {
+     Serial.print("Receiving Data...");
+     // Serial.println((char*)buf);
+     // outSideTheHouse = false;
+     data = (char*)buf;
+     // Serial.println(data);
+
+
+     // Set LED
+     // digitalWrite(redLED, HIGH);
+
+     // TODO: Get the time from the real time clock
+     // Placeholder:
+     savedTime = 1358904325; // About 8:27PM EST
+  }
+  else
+  {
+     Serial.println("recv 2 failed");
+     // outSideTheHouse = true;
+     // Set LED
+     // digitalWrite(redLED, LOW);
+
+     savedTime = 1358904325; // About 8:27PM EST
+  }
+
+  // Reattach Interrupt on the RTC
+  attachInterrupt(1, HandleInterrupt, LOW);
+
+  return data;
+}
+
+void ToggleLights(Command cmd){
+  if(!cmd.lightStatus){
+    // Turn all lights off
+    digitalWrite(greenLED, LOW);
+    digitalWrite(redLED, LOW);
+    digitalWrite(blueLED, LOW);
+  }
+  else{
+    if(cmd.r)
+      digitalWrite(redLED, HIGH);
+    else
+      digitalWrite(redLED, LOW);
+
+    if(cmd.g)
+      digitalWrite(greenLED, HIGH);
+    else
+      digitalWrite(greenLED, LOW);
+
+    if(cmd.b)
+      digitalWrite(blueLED, HIGH);
+    else
+      digitalWrite(blueLED, LOW);
+  }  
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Home 
 void Home(){
-  Serial.println("You are inside the house");
+  Serial.println("*************************");
+  Serial.println("Status: Home");
 
   // Print the Time
   const int len = 32;
@@ -181,32 +210,31 @@ void Home(){
   // Serial.print("CheckRF: ");
   // Serial.println(checkRF);
   if(checkRF){
-    Serial.println("Starting WIRELESS");
+    Serial.println("Starting Wireless...");
     String data = rx();
     checkRF = false;
 
-    if(data == "0")
+    if(data == "0"){
       Serial.println("No Data Received");
+      outSideTheHouse = true;
+    }
     else{
+      Serial.print("Received: ");
       Serial.println(data);
-      
       Command cmd = HandleIncommingData(data);
-      Serial.println(cmd.setTime);
-      Serial.println(cmd.time);
-      Serial.println(cmd.lightStatus);
-      Serial.println(cmd.r);
-      Serial.println(cmd.g);
-      Serial.println(cmd.b);
-
+      ToggleLights(cmd);
+      outSideTheHouse = false;
     }
   }
+  Serial.print("\n");
   delay(1000);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 // Away
 void Away(){
-  Serial.println("You are outside the house");
+  Serial.println("*************************");
+  Serial.println("Status: Away");
 
   // Print the Time
   const int len = 32;
@@ -219,21 +247,25 @@ void Away(){
   // Serial.print("CheckRF: ");
   // Serial.println(checkRF);
   if(checkRF){
-    Serial.println("Starting WIRELESS");
+    Serial.println("Starting Wireless...");
     detachInterrupt(1);
     String data = rx();
     attachInterrupt(1, HandleInterrupt, LOW);
     checkRF = false;
 
-    if(data == "0")
+    if(data == "0"){
       Serial.println("No Data Received");
+      outSideTheHouse = true;
+    }
     else{
-      Serial.println(data);
-      
+      Serial.print("Received: ");
+      Serial.println(data);   
       Command cmd = HandleIncommingData(data);
-      Serial.println(cmd.time);
+      ToggleLights(cmd);
+      outSideTheHouse = false;
     }
   }
+  Serial.print("\n");
   delay(1000);
 }
 
