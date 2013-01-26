@@ -95,22 +95,6 @@ void RTC_DS3234::setA1(uint8_t s, uint8_t mi, uint8_t h, uint8_t d, bool * flags
     }
 }
 
-// void DS3234_set_a1(uint8_t pin, uint8_t s, uint8_t mi, uint8_t h, uint8_t d, boolean * flags)
-// {
-//     uint8_t t[4] = { s, mi, h, d };
-//     uint8_t i;
-
-//     for (i = 0; i <= 3; i++) {
-//         digitalWrite(pin, LOW);
-//         SPI.transfer(i + 0x87);
-//         if (i == 3) {
-//             SPI.transfer(dectobcd(t[3]) | (flags[3] << 7) | (flags[4] << 6));
-//         } else
-//             SPI.transfer(dectobcd(t[i]) | (flags[i] << 7));
-//         digitalWrite(pin, HIGH);
-//     }
-// }
-
 // flags are: A2M2 (minutes), A2M3 (hour), A2M4 (day) 0 to enable, 1 to disable, DY/DT (dayofweek == 1/dayofmonth == 0) 
 void RTC_DS3234::setA2(uint8_t mi, uint8_t h, uint8_t d, bool * flags)
 {
