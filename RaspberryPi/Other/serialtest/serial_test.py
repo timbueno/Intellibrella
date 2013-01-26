@@ -8,7 +8,9 @@ from datetime import datetime
 # rot13 = string.maketrans( 
 #     "ABCDEFGHIJKLMabcdefghijklmNOPQRSTUVWXYZnopqrstuvwxyz", 
 #     "NOPQRSTUVWXYZnopqrstuvwxyzABCDEFGHIJKLMabcdefghijklm")
-msg = ":4,0123456,5,34325326@"
+# msg = ":4,0123456,5,34325326@"
+msg = ":0,1358904325,1,0,0,1@"
+
 ser = serial.Serial("/dev/ttyAMA0",9600)
 # ser.open()
 
