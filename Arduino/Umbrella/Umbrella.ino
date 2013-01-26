@@ -138,7 +138,7 @@ String rx() {
   rf22.waitAvailableTimeout(timeout);
   if (rf22.recv(buf, &len))
   {
-     Serial.print("Receiving Data...");
+     Serial.println("Receiving Data...");
      // Serial.println((char*)buf);
      // outSideTheHouse = false;
      data = (char*)buf;
