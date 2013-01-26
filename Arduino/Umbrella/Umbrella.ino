@@ -3,6 +3,7 @@
 #include "RTC_DS3234.h"
 #include "RTClib.h"
 #include "ADXL335.h"
+#include "DataTypes.h"
 
 // Integer Values to Hold Used Pins
 int greenLED = 7;
@@ -73,7 +74,12 @@ void HandleInterrupt(){
 
 ////////////////////////////////////////////////////////////////////////////////
 // Receive data from wireless function
-void rx() {
+String rx() {
+  // Remove Interrupt on the RTC
+  detachInterrupt(1);
+
+  // String
+  String data = "0";
   // Wireless timeout in milliseconds
   uint16_t timeout = 3000;
 
@@ -92,8 +98,11 @@ void rx() {
   if (rf22.recv(buf, &len))
   {
      Serial.print("got one in user: ");
-     Serial.println((char*)buf);
+     // Serial.println((char*)buf);
      outSideTheHouse = false;
+     data = (char*)buf;
+     // Serial.println(data);
+
 
      // Set LED
      digitalWrite(redLED, HIGH);
@@ -112,7 +121,49 @@ void rx() {
      savedTime = 1358904325; // About 8:27PM EST
   }
 
+  // Reattach Interrupt on the RTC
+  attachInterrupt(1, HandleInterrupt, LOW);
+
+  return data;
 }
+
+////////////////////////////////////////////////////////////////////////////////
+// Handle the incoming data
+Command HandleIncommingData(String dataString){
+
+  String arg;
+  char charBuffer[16];
+
+  Command cmd;
+
+  arg = dataString.substring(0, 1);
+  arg.toCharArray(charBuffer, 16);
+  cmd.setTime = atol(charBuffer);
+
+  arg = dataString.substring(2, 12);
+  arg.toCharArray(charBuffer, 16);
+  cmd.time = atol(charBuffer);
+
+  arg = dataString.substring(13, 14);
+  arg.toCharArray(charBuffer, 16);
+  cmd.lightStatus = atol(charBuffer);
+
+  arg = dataString.substring(15, 16);
+  arg.toCharArray(charBuffer, 16);
+  cmd.r = atol(charBuffer);
+
+  arg = dataString.substring(17, 18);
+  arg.toCharArray(charBuffer, 16);
+  cmd.g = atol(charBuffer);
+
+  arg = dataString.substring(19);
+  arg.toCharArray(charBuffer, 16);
+  cmd.b = atol(charBuffer);
+
+  return cmd;
+
+}
+
 
 ////////////////////////////////////////////////////////////////////////////////
 // Home 
@@ -131,10 +182,23 @@ void Home(){
   // Serial.println(checkRF);
   if(checkRF){
     Serial.println("Starting WIRELESS");
-    detachInterrupt(1);
-    rx();
-    attachInterrupt(1, HandleInterrupt, LOW);
+    String data = rx();
     checkRF = false;
+
+    if(data == "0")
+      Serial.println("No Data Received");
+    else{
+      Serial.println(data);
+      
+      Command cmd = HandleIncommingData(data);
+      Serial.println(cmd.setTime);
+      Serial.println(cmd.time);
+      Serial.println(cmd.lightStatus);
+      Serial.println(cmd.r);
+      Serial.println(cmd.g);
+      Serial.println(cmd.b);
+
+    }
   }
   delay(1000);
 }
@@ -157,9 +221,18 @@ void Away(){
   if(checkRF){
     Serial.println("Starting WIRELESS");
     detachInterrupt(1);
-    rx();
+    String data = rx();
     attachInterrupt(1, HandleInterrupt, LOW);
     checkRF = false;
+
+    if(data == "0")
+      Serial.println("No Data Received");
+    else{
+      Serial.println(data);
+      
+      Command cmd = HandleIncommingData(data);
+      Serial.println(cmd.time);
+    }
   }
   delay(1000);
 }
