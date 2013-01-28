@@ -9,14 +9,24 @@ from datetime import datetime
 #     "ABCDEFGHIJKLMabcdefghijklmNOPQRSTUVWXYZnopqrstuvwxyz", 
 #     "NOPQRSTUVWXYZnopqrstuvwxyzABCDEFGHIJKLMabcdefghijklm")
 # msg = ":4,0123456,5,34325326@"
-msg = ":0,1358904325,1,0,0,1@"
+# msg = ":0,1358904325,1,0,0,1@"
+
+setTime = "0"
+
+lightStatus = "1"
+r = "0"
+g = "1"
+b = "0"
 
 ser = serial.Serial("/dev/ttyAMA0",9600)
 # ser.open()
 
 try:
 	while 1 :
-		print "Time: ", datetime.now().strftime("%m/%d/%Y %H:%M:%S") 
+		now = datetime.now()
+		print "Time: ", now.strftime("%m/%d/%Y %H:%M:%S") 
+
+		msg = ":"+setTime+","+now.strftime("%s")+","+lightStatus+","+r+","+g+","+b+"@"
 
 		# Send message to transmission arduino
 		try:
