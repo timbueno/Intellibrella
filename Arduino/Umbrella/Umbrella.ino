@@ -6,18 +6,18 @@
 #include "DataTypes.h"
 
 // Integer Values to Hold Used Pins
-int redLED = 8;
-int greenLED = 7;
-int blueLED = 6;
+const int redLED = 8;
+const int greenLED = 7;
+const int blueLED = 6;
 
-int statusLED = 5;
+const int statusLED = 5;
 
-int ssRTC = 9;
-int state = HIGH;
+// RTC SS pin
+const int ssRTC = 9;
 
 // Important Variables
 boolean outSideTheHouse = false;
-int savedTime;
+unsigned long savedTime;
 
 // Singleton instance of the radio
 // and related global variables
@@ -34,13 +34,18 @@ volatile int8_t increments = 0;
 // Setup
 void setup() {
 
+  // SPI necessary for RTC and Wireless
   SPI.begin();
 
+  // Set led pins to output
   pinMode(greenLED, OUTPUT);
   pinMode(redLED, OUTPUT);
+  pinMode(blueLED, OUTPUT);
 
-  
+  // Begin serial output for debugging
   Serial.begin(9600);
+
+  // Initialize the Wireless
   if (!rf22.init())
     Serial.println("RF22 init failed");
 
@@ -60,16 +65,11 @@ void setup() {
 ////////////////////////////////////////////////////////////////////////////////
 // Receive data from wireless function
 void HandleInterrupt(){
-  RTC.clearflags();
-
-  // Toggle light
-  // Remove this at some point
-  // state = !state;
-  // digitalWrite(greenLED, state);
-
+  RTC.clearflags(); // Clear the alarm flag on the RTC
 
   increments = increments+1;
   
+  // Set CheckRF flag to true if desired time has elapsed
   if(increments == incrementstowait){
     checkRF = true;
     increments = 0;
@@ -85,26 +85,32 @@ Command HandleIncommingData(String dataString){
 
   Command cmd;
 
+  // setTime
   arg = dataString.substring(0, 1);
   arg.toCharArray(charBuffer, 16);
   cmd.setTime = atol(charBuffer);
 
+  // time
   arg = dataString.substring(2, 12);
   arg.toCharArray(charBuffer, 16);
   cmd.time = atol(charBuffer);
 
+  // lightStatus
   arg = dataString.substring(13, 14);
   arg.toCharArray(charBuffer, 16);
   cmd.lightStatus = atol(charBuffer);
 
+  // r (Red Light)
   arg = dataString.substring(15, 16);
   arg.toCharArray(charBuffer, 16);
   cmd.r = atol(charBuffer);
 
+  // g (Green Light)
   arg = dataString.substring(17, 18);
   arg.toCharArray(charBuffer, 16);
   cmd.g = atol(charBuffer);
 
+  // b (Blue Light)
   arg = dataString.substring(19);
   arg.toCharArray(charBuffer, 16);
   cmd.b = atol(charBuffer);
@@ -119,8 +125,10 @@ String rx() {
   // Remove Interrupt on the RTC
   detachInterrupt(1);
 
-  // String
+  // Set string to zero, if no data is received
+  // return zero
   String data = "0";
+
   // Wireless timeout in milliseconds
   uint16_t timeout = 3000;
 
@@ -140,13 +148,7 @@ String rx() {
   {
      Serial.println("Receiving Data...");
      // Serial.println((char*)buf);
-     // outSideTheHouse = false;
      data = (char*)buf;
-     // Serial.println(data);
-
-
-     // Set LED
-     // digitalWrite(redLED, HIGH);
 
      // TODO: Get the time from the real time clock
      // Placeholder:
@@ -159,7 +161,7 @@ String rx() {
      // Set LED
      // digitalWrite(redLED, LOW);
 
-     savedTime = 1358904325; // About 8:27PM EST
+     // savedTime = 1358904325; // About 8:27PM EST
   }
 
   // Reattach Interrupt on the RTC
@@ -168,6 +170,9 @@ String rx() {
   return data;
 }
 
+
+////////////////////////////////////////////////////////////////////////////////
+// Set The lights
 void ToggleLights(Command cmd){
   if(!cmd.lightStatus){
     // Turn all lights off
@@ -194,6 +199,46 @@ void ToggleLights(Command cmd){
 }
 
 ////////////////////////////////////////////////////////////////////////////////
+// Set the Time
+void SetTime(Command cmd){
+  if(cmd.setTime){
+    Serial.println("Setting Time... ");
+    RTC.adjust(cmd.time);
+  }
+  else{
+    // Serial.println("Not Setting Time");
+  }
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// Check for Wireless signal and handle the resulting incoming data
+void CheckWireless(){
+  Serial.println("Starting Wireless...");
+  String data = rx();
+  checkRF = false;
+
+  if(data == "0"){
+    Serial.println("No Data Received");
+    // Data WAS NOT recieved... were are outside
+    outSideTheHouse = true;
+  }
+  else{
+    Serial.print("Received: ");
+    Serial.println(data);
+
+    // Convert data string object to Command Object
+    Command cmd = HandleIncommingData(data);
+
+    // Perform actions based on the commands received
+    ToggleLights(cmd);
+    SetTime(cmd);
+    
+    // Data was received... were are now inside the house
+    outSideTheHouse = false;
+  }
+}
+
+////////////////////////////////////////////////////////////////////////////////
 // Home 
 void Home(){
   Serial.println("*************************");
@@ -210,21 +255,9 @@ void Home(){
   // Serial.print("CheckRF: ");
   // Serial.println(checkRF);
   if(checkRF){
-    Serial.println("Starting Wireless...");
-    String data = rx();
-    checkRF = false;
 
-    if(data == "0"){
-      Serial.println("No Data Received");
-      outSideTheHouse = true;
-    }
-    else{
-      Serial.print("Received: ");
-      Serial.println(data);
-      Command cmd = HandleIncommingData(data);
-      ToggleLights(cmd);
-      outSideTheHouse = false;
-    }
+    CheckWireless();
+
   }
   Serial.print("\n");
   delay(1000);
@@ -247,23 +280,9 @@ void Away(){
   // Serial.print("CheckRF: ");
   // Serial.println(checkRF);
   if(checkRF){
-    Serial.println("Starting Wireless...");
-    detachInterrupt(1);
-    String data = rx();
-    attachInterrupt(1, HandleInterrupt, LOW);
-    checkRF = false;
 
-    if(data == "0"){
-      Serial.println("No Data Received");
-      outSideTheHouse = true;
-    }
-    else{
-      Serial.print("Received: ");
-      Serial.println(data);   
-      Command cmd = HandleIncommingData(data);
-      ToggleLights(cmd);
-      outSideTheHouse = false;
-    }
+    CheckWireless();
+
   }
   Serial.print("\n");
   delay(1000);
