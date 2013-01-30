@@ -41,8 +41,8 @@ uint8_t RTC_DS3234::begin(void)
     cs(LOW);
     SPI.transfer(CONTROL_W);
     // SPI.transfer(0x0); // Enable Oscillator only
-    // SPI.transfer(0x06); // Enable Oscillator, Interrupts and Alarm 2
-    SPI.transfer(0x05); // Enable Oscillator, Interrupts and Alarm 1
+    SPI.transfer(0x06); // Enable Oscillator, Interrupts and Alarm 2
+    // SPI.transfer(0x05); // Enable Oscillator, Interrupts and Alarm 1
     cs(HIGH);
     delay(1);
 
