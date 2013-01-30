@@ -234,6 +234,10 @@ void CheckLocationChange(){
     cmd.b = 0;
 
     ToggleLights(cmd); // Turn OFF the lights
+
+    // Set moved time so lights dont go on immediately after changing location
+    // (Dont act like your fogotten when you've only left the house)
+    movedTime = RTC.now(); 
   }
 
   lastplace = outSideTheHouse;
