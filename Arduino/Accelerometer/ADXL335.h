@@ -43,6 +43,9 @@ class ADXL335 {
 		int yStable; // last known stable ADC value
 		int zStable; // last known stable ADC value
 
+
+		AnalogData lastread;
+		
 		// void Stabilize();
 		// // Variables that contain the current analog
 		// // output of the 3 axis' ADC readings

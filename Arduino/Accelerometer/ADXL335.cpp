@@ -11,6 +11,10 @@ ADXL335::ADXL335(int xpin, int ypin, int zpin){
 
 	_minVal = 403;
 	_maxVal = 625;
+
+	lastread.x = 0;
+	lastread.y = 0;
+	lastread.z = 0;
 };
 
 ADXL335::AnalogData ADXL335::GetAnalog(){
@@ -49,18 +53,46 @@ bool ADXL335::CheckForStability(){
 	return false;
 };
 
+// bool ADXL335::CheckForMovement(){
+
+// 	AnalogData data = GetAnalog();
+
+// 	if(data.x<(xStable+_jitter) && data.x>(xStable-_jitter)){
+// 		if(data.y<(yStable+_jitter) && data.y>(yStable-_jitter)){
+// 			if(data.z<(zStable+_jitter) && data.z>(zStable-_jitter)){
+// 				Serial.println("Did Not Move");
+// 				return false;
+// 			}
+// 		}
+// 	}
+// 	Serial.println("Moved!!");
+// 	stable = false;
+// 	return true;
+// };
+
 bool ADXL335::CheckForMovement(){
 
 	AnalogData data = GetAnalog();
 
-	if(data.x<(xStable+_jitter) && data.x>(xStable-_jitter)){
-		if(data.y<(yStable+_jitter) && data.y>(yStable-_jitter)){
-			if(data.z<(zStable+_jitter) && data.z>(zStable-_jitter)){
+	if(data.x<(lastread.x+_jitter) && data.x>(lastread.x-_jitter)){
+		if(data.y<(lastread.y+_jitter) && data.y>(lastread.y-_jitter)){
+			if(data.z<(lastread.z+_jitter) && data.z>(lastread.z-_jitter)){
 				Serial.println("Did Not Move");
+
+				lastread.x = data.x;
+				lastread.y = data.y;
+				lastread.z = data.z;
+
+				stable = true;
 				return false;
 			}
 		}
 	}
+
+	lastread.x = data.x;
+	lastread.y = data.y;
+	lastread.z = data.z;
+
 	Serial.println("Moved!!");
 	stable = false;
 	return true;
