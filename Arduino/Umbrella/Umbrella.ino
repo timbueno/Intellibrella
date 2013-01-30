@@ -17,17 +17,24 @@ const int ssRTC = 9;
 
 // Important Variables
 boolean outSideTheHouse = false;
+boolean lastplace = false;
 unsigned long savedTime;
 
 // Singleton instance of the radio
 // and related global variables
 RF22 rf22;
-bool checkRF = true; // true so check for rf on bootup 
+bool checkRF = true; // true so check for rf on bootup
+
+// Flag for checking accelerometer
+ADXL335 Accel(0, 1, 2);
+bool checkAccel = true;
+DateTime movedTime;
+int forgetmeminutes = 2;
 
 // Instance of the Real Time Clock
 // and related global variables
 RTC_DS3234 RTC(ssRTC);
-volatile const uint8_t incrementstowait = 10; // seconds (A1), minutes (A2)  
+volatile const uint8_t incrementstowait = 1; // seconds (A1), minutes (A2)  
 volatile int8_t increments = 0;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -53,10 +60,12 @@ void setup() {
   // Make sure to change the control register in RTC_DS3234.cpp
   // for the appropriate alarm.
   RTC.begin();
-  bool flags[5] = {1, 1, 1, 1, 1}; // Alarm every second
-  RTC.setA1(1, 1, 1, 1, flags); // Alarm 1
-  // bool flags[4] = {1, 1, 1, 0}; // Alarm every minute
-  // RTC.setA2(1, 1, 1, flags);  // Alarm 2
+  // bool flags[5] = {1, 1, 1, 1, 1}; // Alarm every second
+  // RTC.setA1(1, 1, 1, 1, flags); // Alarm 1
+  bool flags[4] = {1, 1, 1, 0}; // Alarm every minute
+  RTC.setA2(1, 1, 1, flags);  // Alarm 2
+
+  movedTime = RTC.now();
 
   // Interrupt for the RTC 
   attachInterrupt(1, HandleInterrupt, LOW);
@@ -68,6 +77,7 @@ void HandleInterrupt(){
   RTC.clearflags(); // Clear the alarm flag on the RTC
 
   increments = increments+1;
+  checkAccel = true;
   
   // Set CheckRF flag to true if desired time has elapsed
   if(increments == incrementstowait){
@@ -152,7 +162,7 @@ String rx() {
 
      // TODO: Get the time from the real time clock
      // Placeholder:
-     savedTime = 1358904325; // About 8:27PM EST
+     // savedTime = 1358904325; // About 8:27PM EST
   }
   else
   {
@@ -211,6 +221,25 @@ void SetTime(Command cmd){
 }
 
 ////////////////////////////////////////////////////////////////////////////////
+// If location has just recently changed turn off all lights.
+void CheckLocationChange(){
+  if(lastplace != outSideTheHouse){
+    Serial.println("Changed Location!");
+    Command cmd;
+    cmd.setTime = 0;
+    cmd.time = 123456;
+    cmd.lightStatus = 0;
+    cmd.r = 0;
+    cmd.g = 0;
+    cmd.b = 0;
+
+    ToggleLights(cmd); // Turn OFF the lights
+  }
+
+  lastplace = outSideTheHouse;
+}
+
+////////////////////////////////////////////////////////////////////////////////
 // Check for Wireless signal and handle the resulting incoming data
 void CheckWireless(){
   Serial.println("Starting Wireless...");
@@ -219,12 +248,20 @@ void CheckWireless(){
 
   if(data == "0"){
     Serial.println("No Data Received");
+    
     // Data WAS NOT recieved... were are outside
     outSideTheHouse = true;
+    // Check if location was just changed;
+    CheckLocationChange(); 
   }
   else{
     Serial.print("Received: ");
     Serial.println(data);
+
+    // Data was received... were are now inside the house
+    outSideTheHouse = false;
+    // Check if location was just changed;
+    CheckLocationChange(); 
 
     // Convert data string object to Command Object
     Command cmd = HandleIncommingData(data);
@@ -233,8 +270,41 @@ void CheckWireless(){
     ToggleLights(cmd);
     SetTime(cmd);
     
-    // Data was received... were are now inside the house
-    outSideTheHouse = false;
+  }
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// Check for movement of the device and act on the resulting data
+void CheckMovement(){
+   checkAccel = false;
+   bool moved = Accel.CheckForMovement();
+   if(moved){
+    // checkRF = true;
+    movedTime = RTC.now();
+    Command cmd;
+    cmd.setTime = 0;
+    cmd.time = 123456;
+    cmd.lightStatus = 0;
+    cmd.r = 0;
+    cmd.g = 0;
+    cmd.b = 0;
+
+    ToggleLights(cmd); // Turn OFF the lights
+   }
+   else{
+    DateTime nowTime = RTC.now();
+    if(nowTime.unixtime()-movedTime.unixtime() > (forgetmeminutes*60)){
+    Serial.println("I've been forgotten!!");
+    Command cmd;
+    cmd.setTime = 0;
+    cmd.time = 123456;
+    cmd.lightStatus = 1;
+    cmd.r = 1;
+    cmd.g = 0;
+    cmd.b = 0;
+
+    ToggleLights(cmd); // Turn ON the lights
+    }
   }
 }
 
@@ -279,6 +349,13 @@ void Away(){
   // Serial.println(increments);
   // Serial.print("CheckRF: ");
   // Serial.println(checkRF);
+
+  if(checkAccel){
+
+    CheckMovement();
+  
+  }
+
   if(checkRF){
 
     CheckWireless();
@@ -297,7 +374,7 @@ void loop() {
 
     if (!outSideTheHouse)
     {
-      Home();      
+      Home();    
     }
 
     if (outSideTheHouse)
