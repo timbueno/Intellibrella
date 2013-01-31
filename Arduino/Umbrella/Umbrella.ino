@@ -6,14 +6,14 @@
 #include "DataTypes.h"
 
 // Integer Values to Hold Used Pins
-const int redLED = 8;
-const int greenLED = 7;
-const int blueLED = 6;
+const int redLED = 9; // PWM
+const int greenLED = 6; // PWM
+const int blueLED = 5; // PWM
 
-const int statusLED = 5;
+// const int statusLED = 5;
 
 // RTC SS pin
-const int ssRTC = 9;
+const int ssRTC = 8;
 
 // Important Variables
 boolean outSideTheHouse = false;
