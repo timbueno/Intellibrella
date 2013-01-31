@@ -15,6 +15,9 @@ LED::LED(unsigned int redPin, unsigned int greenPin, unsigned int bluePin){
 	pinMode(_redPin, OUTPUT);
 	pinMode(_greenPin, OUTPUT);
 	pinMode(_bluePin, OUTPUT);
+
+	// LEDs OFF
+	ledState = 0;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -141,7 +144,7 @@ void LED::error(){
 
 	int d = 250;
 
-	for(int i=0; i <= 4; i ++){
+	for(int i=0; i<=4; i++){
 		redToggle(HIGH);
 		delay(d);
 		redToggle(LOW);
