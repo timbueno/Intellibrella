@@ -18,7 +18,6 @@ const int ssRTC = 9;
 // Important Variables
 boolean outSideTheHouse = false;
 boolean lastplace = false;
-unsigned long savedTime;
 
 // Singleton instance of the radio
 // and related global variables
@@ -159,10 +158,6 @@ String rx() {
      Serial.println("Receiving Data...");
      // Serial.println((char*)buf);
      data = (char*)buf;
-
-     // TODO: Get the time from the real time clock
-     // Placeholder:
-     // savedTime = 1358904325; // About 8:27PM EST
   }
   else
   {
@@ -170,8 +165,6 @@ String rx() {
      // outSideTheHouse = true;
      // Set LED
      // digitalWrite(redLED, LOW);
-
-     // savedTime = 1358904325; // About 8:27PM EST
   }
 
   // Reattach Interrupt on the RTC
