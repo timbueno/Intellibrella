@@ -14,9 +14,9 @@ from datetime import datetime
 setTime = "0"
 
 lightStatus = "1"
-r = "0"
-g = "1"
-b = "0"
+# r = "0"
+# g = "1"
+# b = "0"
 
 ser = serial.Serial("/dev/ttyAMA0",9600)
 # ser.open()
@@ -26,7 +26,8 @@ try:
 		now = datetime.now()
 		print "Time: ", now.strftime("%m/%d/%Y %H:%M:%S") 
 
-		msg = ":"+setTime+","+now.strftime("%s")+","+lightStatus+","+r+","+g+","+b+"@"
+		# msg = ":"+setTime+","+now.strftime("%s")+","+lightStatus+","+r+","+g+","+b+"@"
+		msg = ":"+setTime+","+now.strftime("%s")+","+lightStatus+"@"
 
 		# Send message to transmission arduino
 		try:

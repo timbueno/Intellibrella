@@ -158,7 +158,7 @@ void LED::error(){
 void LED::continueState(){
 
 	if(ledState == lastState){
-		changedLocation();
+		// changedLocation();
 		allOff();
 	}
 

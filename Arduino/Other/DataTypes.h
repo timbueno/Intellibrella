@@ -4,8 +4,8 @@ struct Command{
   bool setTime;
   unsigned long time;
 
-  bool lightStatus;
-  bool r;
-  bool g;
-  bool b;
+  int lightStatus;
+  // bool r;
+  // bool g;
+  // bool b;
 };
