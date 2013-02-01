@@ -19,6 +19,9 @@ class LED {
 		void greenToggle(int state);
 		void blueToggle(int state);
 
+		void redGreenBlue(int speed);
+		void colorPulse(char c, int speed);
+
 		void forgotten();
 		void rain();
 		void lightRain();

@@ -36,6 +36,58 @@ void LED::blueToggle(int state){
 }
 
 ////////////////////////////////////////////////////////////////////////////////
+// Turns on and off all three available colors at full power
+void LED::redGreenBlue(int speed){
+	redToggle(HIGH);
+	delay(speed);
+	redToggle(LOW);
+	greenToggle(HIGH);
+	delay(speed);
+	greenToggle(LOW);
+	blueToggle(HIGH);
+	delay(speed);
+	blueToggle(LOW);
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// Pulse the desired LED at desired speed
+void LED::colorPulse(char c, int speed){
+	
+	int color;
+	switch(c){
+		case 'r':
+			color = _redPin;
+			break;
+		case 'g':
+			color = _greenPin;
+			break;
+		case 'b':
+			color = _bluePin;
+			break;
+		default:
+			color = _redPin;
+			break;
+	}
+
+	analogWrite(color, 0);
+
+	int direction = 1;
+	unsigned int intensity = 0;
+	for(int e=0; e<=1; e++){
+		for(int i = 0; i<255; i++){
+			if(direction == 1)
+				intensity = intensity + 1;
+			else
+				intensity = intensity - 1;
+
+			analogWrite(color, intensity);
+			delay(speed);
+		}
+		direction = 0;
+	}
+}
+
+////////////////////////////////////////////////////////////////////////////////
 // Rotate through colors (can be looped continuously)
 void LED::rotateColors(int speed){
 	analogWrite(_redPin, 0);

@@ -18,6 +18,9 @@ void setup() {
  
 void loop() {
 
-	led.forgotten();
+	// led.forgotten();
+	// led.redGreenBlue(500);
+	led.colorPulse('g',10);
+	led.colorPulse('b',10);
 	// led.rotateColors(10);
 }
