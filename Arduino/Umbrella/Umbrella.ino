@@ -12,9 +12,8 @@ const int redLED = 9; // PWM
 const int greenLED = 6; // PWM
 const int blueLED = 5; // PWM
 
+// Initialize the LED object
 LED led(redLED, greenLED, blueLED);
-
-// const int statusLED = 5;
 
 // RTC SS pin
 const int ssRTC = 8;
@@ -47,19 +46,14 @@ void setup() {
   // SPI necessary for RTC and Wireless
   SPI.begin();
 
-  // // Set led pins to output
-  // pinMode(greenLED, OUTPUT);
-  // pinMode(redLED, OUTPUT);
-  // pinMode(blueLED, OUTPUT);
-
   // Begin serial output for debugging
   Serial.begin(9600);
 
   // Initialize the Wireless
   if (!rf22.init()){
     Serial.println("RF22 init failed");
-    led.error();
-    software_Reset();
+    led.error(); // Indicate an error on the LEDs
+    software_Reset(); // Reset the unit if wireless doesn't initialize
   }
   // Initialize clock and set the alarm.
   // Make sure to change the control register in RTC_DS3234.cpp
@@ -128,16 +122,6 @@ Command HandleIncommingData(String dataString){
   // arg.toCharArray(charBuffer, 16);
   // cmd.r = atol(charBuffer);
 
-  // // g (Green Light)
-  // arg = dataString.substring(17, 18);
-  // arg.toCharArray(charBuffer, 16);
-  // cmd.g = atol(charBuffer);
-
-  // // b (Blue Light)
-  // arg = dataString.substring(19);
-  // arg.toCharArray(charBuffer, 16);
-  // cmd.b = atol(charBuffer);
-
   return cmd;
 
 }
@@ -176,9 +160,6 @@ String rx() {
   else
   {
      Serial.println("recv 2 failed");
-     // outSideTheHouse = true;
-     // Set LED
-     // digitalWrite(redLED, LOW);
   }
 
   // Reattach Interrupt on the RTC
@@ -186,34 +167,6 @@ String rx() {
 
   return data;
 }
-
-
-////////////////////////////////////////////////////////////////////////////////
-// Set The lights
-// void ToggleLights(Command cmd){
-//   if(!cmd.lightStatus){
-//     // Turn all lights off
-//     digitalWrite(greenLED, LOW);
-//     digitalWrite(redLED, LOW);
-//     digitalWrite(blueLED, LOW);
-//   }
-//   else{
-//     if(cmd.r)
-//       digitalWrite(redLED, HIGH);
-//     else
-//       digitalWrite(redLED, LOW);
-
-//     if(cmd.g)
-//       digitalWrite(greenLED, HIGH);
-//     else
-//       digitalWrite(greenLED, LOW);
-
-//     if(cmd.b)
-//       digitalWrite(blueLED, HIGH);
-//     else
-//       digitalWrite(blueLED, LOW);
-//   }  
-// }
 
 ////////////////////////////////////////////////////////////////////////////////
 // Set the Time
@@ -231,16 +184,7 @@ void SetTime(Command cmd){
 // If location has just recently changed turn off all lights.
 void CheckLocationChange(){
   if(lastplace != outSideTheHouse){
-    // Serial.println("Changed Location!");
-    // Command cmd;
-    // cmd.setTime = 0;
-    // cmd.time = 123456;
-    // cmd.lightStatus = 0;
-    // cmd.r = 0;
-    // cmd.g = 0;
-    // cmd.b = 0;
-
-    // ToggleLights(cmd); // Turn OFF the lights
+    Serial.println("Changed Location!");
 
     // Set moved time so lights dont go on immediately after changing location
     // (Dont act like your fogotten when you've only left the house)
@@ -280,7 +224,7 @@ void CheckWireless(){
     Command cmd = HandleIncommingData(data);
 
     // Perform actions based on the commands received
-    // ToggleLights(cmd);
+    // 0 Off, 1 Rain, 2 Light Rain
     led.ledState = cmd.lightStatus;
     SetTime(cmd);
     
@@ -296,32 +240,18 @@ void CheckMovement(){
     // checkRF = true;
     movedTime = RTC.now();
 
+    // Turn all LEDs off (Not forgotten)
     led.ledState = 0;
 
-    // Command cmd;
-    // cmd.setTime = 0;
-    // cmd.time = 123456;
-    // cmd.lightStatus = 0;
-    // cmd.r = 0;
-    // cmd.g = 0;
-    // cmd.b = 0;
-    // ToggleLights(cmd); // Turn OFF the lights
    }
    else{
     DateTime nowTime = RTC.now();
     if(nowTime.unixtime()-movedTime.unixtime() > (forgetmeminutes*60)){
     Serial.println("I've been forgotten!!");
 
+    // Set LED mode to Forgotten pattern
     led.ledState = 3;
 
-    // Command cmd;
-    // cmd.setTime = 0;
-    // cmd.time = 123456;
-    // cmd.lightStatus = 1;
-    // cmd.r = 1;
-    // cmd.g = 0;
-    // cmd.b = 0;
-    // ToggleLights(cmd); // Turn ON the lights
     }
   }
 }
@@ -338,7 +268,9 @@ void Home(){
   DateTime now = RTC.now();
   Serial.println(now.toString(buf,len));
 
+  // Continue whatever Mode the LEDs are currently in
   led.continueState();
+
   // Serial.print("Increments: ");
   // Serial.println(increments);
   // Serial.print("CheckRF: ");
@@ -364,7 +296,9 @@ void Away(){
   DateTime now = RTC.now();
   Serial.println(now.toString(buf, len));
 
+  // Continue whatever Mode the LEDs are currently in
   led.continueState();
+  
   // Serial.print("Increments: ");
   // Serial.println(increments);
   // Serial.print("CheckRF: ");
