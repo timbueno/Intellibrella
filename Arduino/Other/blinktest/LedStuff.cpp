@@ -51,7 +51,7 @@ void LED::redGreenBlue(int speed){
 
 ////////////////////////////////////////////////////////////////////////////////
 // Pulse the desired LED at desired speed
-void LED::colorPulse(char c, int speed){
+void LED::colorPulse(char c, int speed, int maxb){
 	
 	int color;
 	switch(c){
@@ -74,7 +74,7 @@ void LED::colorPulse(char c, int speed){
 	int direction = 1;
 	unsigned int intensity = 0;
 	for(int e=0; e<=1; e++){
-		for(int i = 0; i<255; i++){
+		for(int i = 0; i<maxb; i++){
 			if(direction == 1)
 				intensity = intensity + 1;
 			else
