@@ -7,7 +7,6 @@ from datetime import timedelta
 from wunderNotifier import wNotifier
 from PiToArduino import PiToArduino
 
-zipcode = '45219'
 setTime = 0
 
 wirelessAPI = PiToArduino()
@@ -15,8 +14,9 @@ wirelessAPI = PiToArduino()
 wInterval = 300 # In Seconds
 
 # Extract data from save file here...
+url = 'US/OH/North_Canton.json'
 
-weatherIntensity = wNotifier(zipcode)
+weatherIntensity = wNotifier(url)
 timeWAcquired = datetime.now()
 
 print '\n=========================='
@@ -28,7 +28,7 @@ while 1:
 
 	# Get new weather data based on the time interval assigned above
 	if datetime.now() > timeWAcquired+timedelta(seconds=wInterval):
-		weatherIntensity = wNotifier(zipcode)
+		weatherIntensity = wNotifier(url)
 		timeWAcquired = datetime.now()
 		
 		print '\n==========================='

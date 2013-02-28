@@ -18,7 +18,7 @@ from WunderAPI import WunderAPI
 # 14: Chance of Thunderstorm
 # 15: Thunderstorm
 
-def wNotifier(zipcode=45219, qhours=(0,6), verbose=0):
+def wNotifier(jsonURL='US/OH/Cincinnati.json', qhours=(0,6), verbose=0):
 
 	# Get list of weather options to check
 	weatherDict = { 0: {'cond': 'No Rain', 'intensity': 0},
@@ -37,8 +37,8 @@ def wNotifier(zipcode=45219, qhours=(0,6), verbose=0):
 	# Have Jay implement this in his code
 	# We shouldn't do this every time we want to get the weather
 	# Have him write the city, state, and country to a file
-	location = api.getCityState(zipcode)
-	api.getWunderHourData(location['jsonurl'])
+	# location = api.getCityState(zipcode)
+	api.getWunderHourData(jsonURL)
 
 	# Get the next 8 hours
 	next8Hours = []
@@ -84,7 +84,10 @@ if __name__ == "__main__":
 	# wNotifier('Abbeville','LA')
 	# wNotifier('Cincinnati','OH')
 	# wNotifier('North_Canton','OH')
-	wNotifier('44720') # North Canton
-	wNotifier('45219') # Cincinnati
-	wNotifier('85053') # Phoenix
+	# wNotifier('44720') # North Canton
+	# wNotifier('45219') # Cincinnati
+	# wNotifier('85053') # Phoenix
+	wNotifier('US/OH/North_Canton.json') # North Canton
+	wNotifier('US/OH/Cincinnati.json') # Cincinnati
+	wNotifier('US/AZ/Phoenix.json') # Phoenix
 

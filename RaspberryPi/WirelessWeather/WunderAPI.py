@@ -4,7 +4,6 @@
 # http://www.wunderground.com/weather/api/d/docs?d=autocomplete-api
 
 import requests
-import string
 from weatherobjects import HourInformation
 
 # API Superclass
