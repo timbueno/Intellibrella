@@ -5,6 +5,7 @@
 # 
 # maybe just next 12 hours? 
 # both?
+# 1361750400.0
 #
 
 import datetime
@@ -16,6 +17,7 @@ class HourInformation(object):
 		self.chance = float(chance)
 		self.condition = condition
 		self.time = datetime.datetime.fromtimestamp(float(time))
+		self.unixtime = float(time)
 		self.timeAcquired = datetime.datetime.now()
 
 	# Converts stored F temperatures to C
@@ -59,7 +61,7 @@ class DayWeather(object):
 
 	def releventhours(self):
 		lowtime = self.day.replace(hour=7, minute=0, second=0, microsecond=0) # self.day @ 7 am
-		hightime = self.day.replace(hour=22, minute=0, second=0, microsecond=0) # self.day @ 10 am
+		hightime = self.day.replace(hour=22, minute=0, second=0, microsecond=0) # self.day @ 10 pm
 
 		self.relhours = self.betweentimes(lowtime, hightime)
 
