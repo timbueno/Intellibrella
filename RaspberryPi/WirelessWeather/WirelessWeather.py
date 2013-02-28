@@ -43,7 +43,7 @@ while 1:
 	# Build Message to be sent to the umbrella unit
 	now = time.mktime(datetime.now().timetuple())
 	msg = '%d,%d,%d' % (setTime, now, weatherIntensity)
-	setTime = 0
+	# setTime = 0
 
 	# Send message to arduino
 	print 'Time: %s' % datetime.now()
