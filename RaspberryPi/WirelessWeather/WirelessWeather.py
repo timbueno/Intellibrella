@@ -46,7 +46,7 @@ while 1:
 
 	# Send message to arduino
 	print 'Time: %s' % datetime.now()
-	print 'Sending message to arduino'
+	print 'Sending Message: %s' % msg
 	wirelessAPI.sendWireless(msg)
 
 	time.sleep(1)
