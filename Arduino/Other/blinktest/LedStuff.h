@@ -31,7 +31,7 @@ class LED {
 
 		void error();
 
-		int ledState; // 0 Off, 1 Rain; 2 Light Rain, 3 Forgotten
+		int ledState; // 0 Off, 1 Light Rain; 2 Rain, 3 Heavey Rain,4 Forgotten
 		int lastState; // The state of the led the previous time used
 
 	private:

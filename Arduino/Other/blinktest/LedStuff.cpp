@@ -209,7 +209,9 @@ void LED::error(){
 // 0 Off, 1 Rain; 2 Light Rain, 3 Forgotten
 void LED::continueState(){
 
-	if(ledState == lastState){
+	// If the led state has changed turn off all
+	// lights prior to lighting the new pattern
+	if(ledState != lastState){
 		// changedLocation();
 		allOff();
 	}
@@ -220,15 +222,19 @@ void LED::continueState(){
 			allOff();
 			break;
 		case 1:
-			rain();
-			break;
-		case 2:
 			lightRain();
 			break;
+		case 2:
+			rain();
+			break;
 		case 3:
+			rain(); //Change to Heavy rain, will need to create that function
+			break;
+		case 4:
 			forgotten();
 			break;
 	}
 
+	// Save the last state of the led
 	lastState = ledState;
 }
