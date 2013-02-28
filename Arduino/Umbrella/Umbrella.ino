@@ -8,9 +8,9 @@
 
 
 // Integer Values to Hold Used Pins
-const int redLED = 9; // PWM
-const int greenLED = 6; // PWM
-const int blueLED = 5; // PWM
+const int redLED = 6; // PWM
+const int greenLED = 5; // PWM
+const int blueLED = 9; // PWM
 
 // Initialize the LED object
 LED led(redLED, greenLED, blueLED);
@@ -224,7 +224,7 @@ void CheckWireless(){
     Command cmd = HandleIncommingData(data);
 
     // Perform actions based on the commands received
-    // 0 Off, 1 Rain, 2 Light Rain
+    // 0 Off, 1 Light Rain, 2 Rain, 3 Heavy Rain
     led.ledState = cmd.lightStatus;
     SetTime(cmd);
     
@@ -250,7 +250,7 @@ void CheckMovement(){
     Serial.println("I've been forgotten!!");
 
     // Set LED mode to Forgotten pattern
-    led.ledState = 3;
+    led.ledState = 4;
 
     }
   }
@@ -318,7 +318,7 @@ void Away(){
   Serial.print("\n");
   
   // If NOT in Forgotten LED mode 
-  if(led.ledState != 3)
+  if(led.ledState != 4)
     delay(1000);
 }
 
