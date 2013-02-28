@@ -12,7 +12,10 @@ setTime = 0
 
 wirelessAPI = PiToArduino()
 
-wInterval = 60 # In Seconds
+wInterval = 300 # In Seconds
+
+# Extract data from save file here...
+
 weatherIntensity = wNotifier(zipcode)
 timeWAcquired = datetime.now()
 
