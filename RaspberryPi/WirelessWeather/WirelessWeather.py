@@ -14,7 +14,7 @@ wirelessAPI = PiToArduino()
 wInterval = 300 # In Seconds
 
 # Extract data from save file here...
-url = 'US/OH/North_Canton.json'
+url = 'US/OH/Cincinnati.json'
 
 weatherIntensity = wNotifier(url)
 timeWAcquired = datetime.now()
