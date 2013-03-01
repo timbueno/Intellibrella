@@ -7,6 +7,7 @@ from datetime import timedelta
 
 from wunderNotifier import wNotifier
 from PiToArduino import PiToArduino
+from readFile import readFileData
 
 setTime = 1
 
@@ -14,8 +15,17 @@ wirelessAPI = PiToArduino()
 
 wInterval = 300 # In Seconds
 
-# Extract data from save file here...
-url = 'US/OH/Cincinnati.json'
+# Extract data from save file
+pref = readFileData('prefs.conf')
+
+url = pref['jsonurl']
+sleepStart = pref['sleep_start']
+sleepEnd = pref['sleep_end']
+print url
+print sleepStart
+print sleepEnd
+
+# url = 'US/OH/Cincinnati.json'
 
 weatherIntensity = wNotifier(url)
 timeWAcquired = datetime.now()

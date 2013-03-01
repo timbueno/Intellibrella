@@ -8,7 +8,7 @@ from weatherobjects import HourInformation
 
 # API Superclass
 class WunderAPI(object):
-	def __init__(self, key='88e9159bac0070a5'):
+	def __init__(self, key='e706976854018712'):
 		self.key = key
 		self.list = []
 

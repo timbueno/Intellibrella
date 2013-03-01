@@ -13,10 +13,6 @@
     <link href="../static/bootstrap/css/alertify.core.css" rel="stylesheet">
     <link href="../static/bootstrap/css/alertify.bootstrap.css" rel="stylesheet">
 
-
-
-
-
     <style>
 
     /* GLOBAL STYLES
@@ -376,11 +372,8 @@
           <h2>Zip Code</h2>
           <p>Enter your ZIP Code. This will enable the Intellibrella alert you based on the weather in your area.</p>
           <p><b>Zip Code</b><br>
-        <input type=text name=ZIP id="zip"></p>
-
-       <center><input type="checkbox" name=locationcheck id="locationcheck" value="value" onchange="toggleDisabled(this.checked)" /><label for="locationcheck">Use current location</label></center>
-
-
+        <input type=text name=ZIP></p>
+ 
 
         </div><!-- /.span4 -->
         <div class="span4">
@@ -525,19 +518,13 @@
     </script>
 
   <script>
-  $("#save").click(function() {
+  $("save").click(function() {
     alertify.alert("<b>Intellibrella configured!</b><br/><br/><br/>You may close this window.");
     // alertify.set({ delay: 30000});
     // alertify.log("Restarting...");
   });
 
   </script>
-
-  <script>
-function toggleDisabled(_checked) {
-    document.getElementById('zip').disabled = _checked ? true : false;
-}
-</script>
 
 
   </body>
