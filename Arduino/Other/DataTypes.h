@@ -5,6 +5,8 @@ struct Command{
   unsigned long time;
 
   int lightStatus;
+
+  bool demo;
   // bool r;
   // bool g;
   // bool b;
