@@ -16,6 +16,7 @@ wInterval = 300 # In Seconds
 
 # Extract data from save file here...
 url = 'US/OH/Cincinnati.json'
+demomode = 1
 
 weatherIntensity = wNotifier(url)
 timeWAcquired = datetime.now()
@@ -43,7 +44,7 @@ while 1:
 
 	# Build Message to be sent to the umbrella unit
 	now = calendar.timegm(datetime.now().timetuple())
-	msg = '%d,%d,%d' % (setTime, now, weatherIntensity)
+	msg = '%d,%d,%d,%d' % (setTime, now, weatherIntensity, demomode)
 	# setTime = 0
 
 	# Send message to arduino
