@@ -177,6 +177,13 @@ void SetTime(Command cmd){
   }
   else{
     // Serial.println("Not Setting Time");
+    // Compare wireless data time with local time
+    // Reset local time if they do not match within 10 minutes
+    DateTime t = RTC.now();
+    if (abs(cmd.time-t.unixtime()) > 600) {
+      Serial.println("Times do not match! Resetting time...");
+      RTC.adjust(cmd.time);
+    }
   }
 }
 
