@@ -21,6 +21,8 @@ const int ssRTC = 8;
 // Important Variables
 boolean outSideTheHouse = false;
 boolean lastplace = false;
+boolean demomode = false;
+
 
 // Singleton instance of the radio
 // and related global variables
@@ -117,6 +119,13 @@ Command HandleIncommingData(String dataString){
   arg.toCharArray(charBuffer, 16);
   cmd.lightStatus = atol(charBuffer);
 
+  // Demo Mode
+  arg = dataString.substring(15, 16);
+  arg.toCharArray(charBuffer, 16);
+  cmd.demo = atol(charBuffer);
+
+
+
   // // r (Red Light)
   // arg = dataString.substring(15, 16);
   // arg.toCharArray(charBuffer, 16);
@@ -176,7 +185,6 @@ void SetTime(Command cmd){
     RTC.adjust(cmd.time);
   }
   else{
-    // Serial.println("Not Setting Time");
     // Compare wireless data time with local time
     // Reset local time if they do not match within 10 minutes
     DateTime t = RTC.now();
@@ -234,6 +242,7 @@ void CheckWireless(){
     // 0 Off, 1 Light Rain, 2 Rain, 3 Heavy Rain
     led.ledState = cmd.lightStatus;
     SetTime(cmd);
+    demomode = cmd.demo;
     
   }
 }
@@ -330,20 +339,59 @@ void Away(){
 }
 
 ////////////////////////////////////////////////////////////////////////////////
+// Demo Mode
+void Demo(){
+
+  // int q = 0;
+  long previousMillis = 0;
+  long checkInterval = 10000;
+  bool check;
+  check = false;
+
+  while(demomode){
+    Serial.println("*************************");
+    Serial.println("DEMO MODE");
+      
+    led.continueState();
+    
+    // led.colorPulse('r',10,100);
+    
+    if(check == true){
+      CheckWireless();
+      check = false;
+    }
+
+    // q = q+1;
+    unsigned long currentMillis = millis();
+    if(currentMillis - previousMillis > checkInterval){
+      check = true;
+      previousMillis = currentMillis;
+      // q = 0;
+    }
+    // delay(1000);
+  }
+}
+
+////////////////////////////////////////////////////////////////////////////////
 // Loop
 void loop() {
 
   // TODO: Replace with while (!during quiet hours)
   while (1) {
 
-    if (!outSideTheHouse)
-    {
-      Home();    
-    }
+    if (!demomode){
+      if (!outSideTheHouse)
+      {
+        Home();    
+      }
 
-    if (outSideTheHouse)
-    {
-      Away();
+      if (outSideTheHouse)
+      {
+        Away();
+      }
+    }
+    else{
+      Demo();
     }
   }
 }
