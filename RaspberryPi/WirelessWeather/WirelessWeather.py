@@ -8,7 +8,7 @@ from datetime import timedelta
 from wunderNotifier import wNotifier
 from PiToArduino import PiToArduino
 
-setTime = 1
+setTime = 0
 
 wirelessAPI = PiToArduino()
 
@@ -42,7 +42,6 @@ while 1:
 
 
 	# Build Message to be sent to the umbrella unit
-	# now = time.mktime(datetime.now().timetuple())
 	now = calendar.timegm(datetime.now().timetuple())
 	msg = '%d,%d,%d' % (setTime, now, weatherIntensity)
 	# setTime = 0
