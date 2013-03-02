@@ -12,6 +12,26 @@
     <link href="../static/bootstrap/css/bootstrap-responsive.css" rel="stylesheet">
     <link href="../static/bootstrap/css/alertify.core.css" rel="stylesheet">
     <link href="../static/bootstrap/css/alertify.bootstrap.css" rel="stylesheet">
+    <link rel="stylesheet" href="../static/bootstrap/css/jquery-ui.css" />
+
+    <script src="../static/scripts/jquery.js"></script>
+    <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+    <script src="http://code.jquery.com/ui/1.10.1/jquery-ui.js"></script>
+    <script src="../static/scripts/alertify.js"></script>
+<!--
+<script>
+      $(function() {
+    $( "#slider" ).slider({
+      value:100,
+      min: 0,
+      max: 500,
+      step: 50,
+      slide: function( event, ui ) {
+        $( "#amount" ).val( "$" + ui.value );
+      }
+    });
+    $( "#amount" ).val( "$" + $( "#slider" ).slider( "value" ) );
+  });</script> -->
 
     <style>
 
@@ -129,13 +149,13 @@
     -------------------------------------------------- */
 
     /* Center align the text within the three columns below the carousel */
-    .marketing .span4 {
+    .marketing .span3 {
       text-align: center;
     }
     .marketing h2 {
       font-weight: normal;
     }
-    .marketing .span4 p {
+    .marketing .span3 p {
       margin-left: 10px;
       margin-right: 10px;
     }
@@ -367,16 +387,9 @@
       <!-- Three columns of text below the carousel -->
       <div class="row">
            <form action="{{ url_for('setup') }}" method=post>
-        <div class="span4">
 
-          <h2>Zip Code</h2>
-          <p>Enter your ZIP Code. This will enable the Intellibrella alert you based on the weather in your area.</p>
-          <p><b>Zip Code</b><br>
-        <input type=text name=ZIP></p>
  
-
-        </div><!-- /.span4 -->
-        <div class="span4">
+      <div class="span3">
           <h2>Wifi Login</h2>
           <p>Enter the login credentials for your wireless network. This will allow your Intellibrella basestation to get weather from the internet.</p>
       <p><b>Network name</b><br>
@@ -384,9 +397,50 @@
       <p><b>Password</b><br>
       <input type=password name=password></p>
         </div><!-- /.span4 -->
-        <div class="span4">
+<!--         </div>
+         <div class="span3">
+        
+          <p>
+            <h2>Rain Intensity</h2>
+          <div class="slidertitle">
+          <p>Use the slider to choose the minimum level of rain intensity for Intellibrella alerts.</p>
+          </div>
+          <div class="sliderbar">
+            <a href="#" id="sliderval"><input type="text" id="amount" style="border: 0; font-weight: bold; vertical-align: bottom;" /></a>
+        </div>
+           
+          <div id="slider"></div>
+
+        </div> -->
+
+<!--          <div class="span3">
+        
+          <p>
+            <h2>Rain Intensity</h2>
+          <p>Use the slider to choose the minimum level of rain intensity for Intellibrella alerts.</p>
+            <input type="text" id="amount" style="border: 0; font-weight: bold; vertical-align: bottom;" />
+          </p>
+           
+          <div id="slider"></div>
+
+        </div> -->
+        <div class="span3">
+          <div class="zip">
+          <h2>Zip Code</h2>
+          <p>Enter your ZIP Code. This will enable the Intellibrella alert you based on the weather in your area.</p>
+          </div>
+          <p><b>Zip Code</b><br>
+        <input type=text name=ZIP id="zip"></p>
+
+       <center><input type="checkbox" name=locationcheck id="locationcheck" value="value" onchange="toggleDisabled(this.checked)" /><label for="locationcheck">Use current location</label></center>
+
+        </div>
+
+
+
+        <div class="span3">
           <h2>Sleep Time</h2>
-          <p>Enter the daily time period for which you don't want the umbrella alert you. This will save battery power, allowing the Intellibrella to last longer between each charge.</p>
+          <p>Choose a daily time period to turn off Intellibrella alerts. This will save battery power, allowing your Intellibrella to last longer between each charge.</p>
           <br>
       <select name=starttime id="starttime">
         <option value="0">12:00 AM</option>
@@ -444,11 +498,35 @@
 
         </div><!-- /.span4 -->
 
+
+
+      <div class="span3">
+          <h2>"Don't Forget Me" Timer</h2>
+          <p>The Intellibrella knows when you've taken your umbrella out but aren't currently using it. The "Don't forget me" timer lets you choose when you'd like to be alerted after you've left it somewhere.</p>
+          <br>
+      <select name=dontforgetme id="dontforgetme">
+        <option value="5">5 Minutes</option>
+        <option value="10">10 Minutes</option> 
+        <option value="15">15 Minutes</option> 
+        <option value="30">20 Minutes</option> 
+        <option value="1">1 Hour</option>  
+        <option value="2">2 Hours</option>
+        <option value="3">3 Hours</option>        
+        <option value="15s">15 Seconds</option>        
+        <option value="30s">30 Seconds</option>        
+      </select>
+
+        </div><!-- /.span4 -->
+
+
+
+
       </div><!-- /.row -->
       <br>
       
       <nav class="button-group">
-      <center><a class="button-primary" href="#" id="save"><input class='btn' type=submit value="Save Settings"></center></a>
+      <center><a class="button-primary" href="#" id="save"><input class='btn' id="save" name=save type=submit value="Save Settings"></a></center>
+      <!-- onClick='javascript:alertify.confirm("<b>Intellibrella configured!</b><br/><br/><br/>You may close this window.");' -->
       </nav>
 
       <!-- START THE FEATURETTES -->
@@ -494,7 +572,6 @@
     <!-- Le javascript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->   
-    <script src="../static/scripts/jquery.js"></script>
     <script src="../static/scripts/bootstrap-transition.js"></script>
     <script src="../static/scripts/bootstrap-alert.js"></script>
     <script src="../static/scripts/bootstrap-modal.js"></script>
@@ -507,24 +584,58 @@
     <script src="../static/scripts/bootstrap-collapse.js"></script>
     <script src="../static/scripts/bootstrap-carousel.js"></script>
     <script src="../static/scripts/bootstrap-typeahead.js"></script>
-    <script src="../static/scripts/alertify.js"></script>
-    <script>
+
+
+
+
+
+<script>
+
+"use strict";
+    var
+    $ = function (id) {
+      return document.getElementById(id);
+    },
+    reset = function () {
+      alertify.set({
+        labels : {
+          ok     : "OK",
+          cancel : "Cancel"
+        },
+        delay : 5000,
+        buttonReverse : false,
+        buttonFocus   : "ok"
+      });
+    };
+
+
       !function ($) {
         $(function(){
           // carousel demo
           $('#myCarousel').carousel()
         })
       }(window.jQuery)
-    </script>
 
-  <script>
-  $("save").click(function() {
+
+
+
+  $("save").onclick = function() {
+    reset();
     alertify.alert("<b>Intellibrella configured!</b><br/><br/><br/>You may close this window.");
+    
+    // $.getJSON($SCRIPT_ROOT + '/_add_numbers', {
+    //     a: $('input[name="sliderval"]').val()
+    //   }),
+
+    return;
     // alertify.set({ delay: 30000});
     // alertify.log("Restarting...");
-  });
+  };
+
 
   </script>
+
+
 
 
   </body>

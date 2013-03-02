@@ -12,6 +12,18 @@
   *zoom: 1;
 }
 
+.marketing .span3 .zip p {
+  margin: 0 0 30px;
+}
+
+/*.marketing .span3 .slidertitle p {
+  height: 2px;
+}
+*/
+.marketing .span3 .sliderbar {
+  vertical-align: 2px;
+}
+
 .clearfix:before,
 .clearfix:after {
   display: table;
@@ -233,6 +245,10 @@ body {
 a {
   color: #0088cc;
   text-decoration: none;
+}
+
+a#sliderval {
+  height: 1px;
 }
 
 a:hover,
