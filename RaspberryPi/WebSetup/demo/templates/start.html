@@ -1,0 +1,26 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<html lang="en">
+<head>
+    <title>Starting!</title>
+    <link rel="stylesheet" href="../static/style.css" type="text/css">
+</head>
+<body>
+     <h1>Starting! </h1>
+      <div class="row">
+           <form action="{{ url_for('setup') }}" method=post>
+    </div> 
+    <nav class="button-group">
+      <center><button id="start" hidden="hidden">Test</button></a></center>
+      <!-- onClick='javascript:alertify.confirm("<b>Intellibrella configured!</b><br/><br/><br/>You may close this window.");' -->
+      </nav>
+
+
+<script>
+setTimeout(function() {
+    document.getElementById('start').click();
+}, 2000);
+</script>
+
+
+</body>
+</html>
