@@ -27,6 +27,7 @@ import time
 import codecs
 import datetime
 import calendar
+import envoy
 from flask import Flask, request, redirect, url_for, render_template
 from WunderAPI import WunderAPI
 
@@ -43,12 +44,14 @@ zip_code = dict()
 
 @app.route('/', methods = ['GET', 'POST'])
 def setup():
+	global r
 	if request.method == 'POST':
-		time.sleep(5)
 		# Kill the transmitting script
 		# os.system("sudo pkill -f \"/usr/bin/python /home/pi/intellibrella/test.py\"")
 		# transmit_process.kill()
 		# Get the html form data
+		# Kill subprocess
+
 		wireless_info['SSID'] = request.form['SSID']
 		wireless_info['password'] = request.form['password']
 		sleep_time['starttime'] = request.form['starttime']
@@ -139,6 +142,10 @@ def save_wireless_config(wireless_info):
 	return
 
 def save_prefs(location_info_dict, sleep_start, sleep_end):
+	# Create a lock file
+	lockFile = "/home/pi/Intellibrella/RaspberryPi/WirelessWeather/lock.lock"
+	lockf = codecs.open(lockFile, 'w', 'utf-8')
+
 	configFile = "/home/pi/Intellibrella/RaspberryPi/WirelessWeather/prefs.conf"
 	f = codecs.open(configFile, 'w', 'utf-8')
 
@@ -150,6 +157,10 @@ def save_prefs(location_info_dict, sleep_start, sleep_end):
 	f.write('sleep_end : ' + str(sleep_end) + '\n')
 
 	f.close()
+
+	lockf.close()
+	os.remove(lockFile)
+
 	return
 
 def parse_sleep_time(sleep_time):
