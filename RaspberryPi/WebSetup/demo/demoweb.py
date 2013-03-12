@@ -42,17 +42,17 @@ def setup():
 
 	return render_template('start.html')
 
-@app.route('/demo0', methods = ['GET', 'POST'])
-def demo0():
-	if request.method == 'POST':
-		save_demo_state('0')
-		i = 0
-		while(i < 5):
-			print "I'm in demo 0"
-			time.sleep(1)
-			i = i+1
-		return redirect(url_for('demo1'))
-	return render_template('error0.html')
+# @app.route('/demo0', methods = ['GET', 'POST'])
+# def demo0():
+# 	if request.method == 'POST':
+# 		save_demo_state('0')
+# 		i = 0
+# 		while(i < 5):
+# 			print "I'm in demo 0"
+# 			time.sleep(3)
+# 			i = i+1
+# 		return redirect(url_for('demo1'))
+# 	return render_template('error0.html')
 
 @app.route('/demo1', methods = ['GET', 'POST'])
 def demo1():
@@ -61,7 +61,7 @@ def demo1():
 		i = 0
 		while(i < 5):
 			print "I'm in demo 1"
-			time.sleep(1)
+			time.sleep(3)
 			i = i+1
 		return redirect(url_for('demo2'))
 	return render_template('error1.html')
@@ -73,7 +73,7 @@ def demo2():
 		i = 0
 		while(i < 5):
 			print "I'm in demo2"
-			time.sleep(1)
+			time.sleep(3)
 			i = i+1
 		return redirect(url_for('demo3'))
 	return render_template('error2.html')
@@ -85,7 +85,7 @@ def demo3():
 		i = 0
 		while(i < 5):
 			print "I'm in demo3"
-			time.sleep(1)
+			time.sleep(3)
 			i = i+1
 		return redirect(url_for('demo4'))
 	return render_template('error3.html')
@@ -97,9 +97,9 @@ def demo4():
 		i = 0
 		while(i < 5):
 			print "I'm in demo 4"
-			time.sleep(1)
+			time.sleep(3)
 			i = i+1
-		return redirect(url_for('setup'))
+		return redirect(url_for('demo1'))
 	return render_template('error4.html')
 
 

@@ -5,18 +5,32 @@
     <link rel="stylesheet" href="../static/style.css" type="text/css">
 </head>
 <body>
+    <div id="content-wrapper">
      <h1>Error 4 :(</h1>
            <form action="{{ url_for('demo4') }}" method=post>
     </div> 
     <nav class="button-group">
+      <center><a href="/demo1"><button id="demo1">Demo 1</button></a></center>
+      <center><a href="/demo2"><button id="demo2">Demo 2</button></a></center>
+      <center><a href="/demo3"><button id="demo3">Demo 3</button></a></center>
       <center><button id="demo4" hidden="hidden">Test</button></a></center>
       <!-- onClick='javascript:alertify.confirm("<b>Intellibrella configured!</b><br/><br/><br/>You may close this window.");' -->
       </nav>
+    </div>
 
 <script>
 setTimeout(function() {
     document.getElementById('demo4').click();
 }, 4000);
+</script>
+
+<script type="text/javascript">
+$(document).ready(function() 
+{
+    // fade in content.
+    $( '#content-wrapper' ).fadeIn(4000);
+    $( '#content-wrapper' ).fadeOut(4000);   
+});
 </script>
 
 </body>

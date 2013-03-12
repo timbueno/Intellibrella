@@ -1,4 +1,4 @@
-#  
+
 #   websetup.py
 #
 #   ABOUT:

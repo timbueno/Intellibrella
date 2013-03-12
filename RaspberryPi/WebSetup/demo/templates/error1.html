@@ -2,23 +2,39 @@
 <html lang="en">
 <head>
     <title>Error 1!</title>
-    <link rel="stylesheet" href="../static/style.css" type="text/css">
+    <link rel="stylesheet" href="../css/style.css" type="text/css">
 </head>
 <body>
+  <div id="content-wrapper">
      <h1>Error 1 :(</h1>
       <div class="row">
            <form action="{{ url_for('demo1') }}" method=post>
     </div> 
     <nav class="button-group">
+      <center><a href="/demo2"><button id="demo2">Demo 2</button></a></center>
+      <center><a href="/demo3"><button id="demo3">Demo 3</button></a></center>
+      <center><a href="/demo4"><button id="demo4">Demo 4</button></a></center>
       <center><button id="demo1" hidden="hidden">Test</button></a></center>
       <!-- onClick='javascript:alertify.confirm("<b>Intellibrella configured!</b><br/><br/><br/>You may close this window.");' -->
       </nav>
+
 
 
 <script>
 setTimeout(function() {
     document.getElementById('demo1').click();
 }, 4000);
+</script>
+
+<script src="../../static/scripts/jquery.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function() 
+{
+    // fade in content.
+    $( '#content-wrapper' ).fadeIn(4000);
+    $( '#content-wrapper' ).fadeOut(4000);   
+});
 </script>
 
 
