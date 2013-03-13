@@ -3,5 +3,5 @@ venv
 .DS_Store
 /Arduino/Umbrella/*
 !/Arduino/Umbrella/*.ino
-
-
+RaspberryPi/WebSetup/demo/demo.conf
+*demo.conf
