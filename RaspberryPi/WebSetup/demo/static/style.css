@@ -1,0 +1,200 @@
+@font-face {
+  font-family: 'Conv_AvenirLTStd-Book';
+  src: url('fonts/AvenirLTStd-Book.eot');
+  src: local('☺'), url('fonts/AvenirLTStd-Book.woff') format('woff'), url('fonts/AvenirLTStd-Book.ttf') format('truetype'), url('fonts/AvenirLTStd-Book.svg') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+
+html, body {
+  font-family: 'Conv_AvenirLTStd-Book';
+/*  height: 100%;*/
+
+}
+
+
+img
+{
+  text-decoration: none;
+  position: absolute;
+  width: 50px;
+  font-size: 120px;
+  left: 50%;
+}
+
+.content-wrapper
+{
+	background: #ffffff;
+  /*background-size: 100%;*/
+  opacity: 1;
+}
+ 
+a {
+	text-decoration: none;
+}
+
+h1
+{
+  /*display: inline;*/
+  width:800px;
+  height:200px;
+  font-size: 64px;
+
+  /* The magic centering code */
+  margin:auto;
+  position:absolute;
+  top:0;bottom:0; /* Aligns Vertically - Remove for Horizontal Only */
+  left:0;right:0; /* Aligns Horizontally - Remove for Vertical Only  */
+
+  /* Prevent div from overflowing main window */
+  max-width:100%;
+  max-height:100%;
+  overflow:auto;
+  color: #ffffff;
+/*  position: absolute;
+left: 44.5%;
+top: 40%;
+margin-left:auto;
+margin-right:auto;
+margin-top: auto;
+margin-bottom: auto;
+vertical-align: middle !important;
+top: 50%;*/
+
+}
+
+h1 .glyph {
+  color: black;
+}
+
+
+.carousel {
+/*  position: relative;*/
+/*  margin-bottom: 20px;*/
+  line-height: 1;
+  height: 100%;
+}
+
+
+.carousel-control {
+  position: absolute;
+
+/*  left: 15px;*/
+  width: 40px;
+  height: 40px;
+/*  margin-top: -20px;*/
+  font-size: 60px;
+  font-weight: 100;
+/*  line-height: 30px;*/
+  color: #ffffff;
+  text-align: center;
+  background: #222222;
+  border: 3px solid #ffffff;
+  -webkit-border-radius: 23px;
+     -moz-border-radius: 23px;
+          border-radius: 23px;
+  opacity: 0.5;
+  filter: alpha(opacity=50);
+}
+
+.carousel-control {
+  margin-top: 0;
+  font-size: 120px;
+  text-shadow: 0 1px 1px rgba(0,0,0,.4);
+  background-color: transparent;
+  border: 0;
+/*      z-index: 10;*/
+}
+
+.carousel-control.left {
+	height: 145px;
+	left: 1%;
+	right: auto;
+	top: 40%;
+}
+
+.carousel-control.right {
+    height: 145px;
+	right: 6%;
+	left: auto;
+	top: 40%;
+}
+
+
+.carousel-control.top {
+	height: 165px;
+	top: 22%;
+	left: 47%;
+	/*-webkit-transform:rotate(270deg);*/
+	margin-top: -180px;
+}
+
+
+.carousel-control.bottom {
+	height: 105px;
+	/*top: 50px;*/
+	left: 47%;
+	bottom: 2%;
+/*	-webkit-transform:rotate(90deg);*/
+}
+
+
+
+
+.carousel-control:hover,
+.carousel-control:focus {
+  color: #ffffff;
+  text-decoration: none;
+  opacity: 0.9;
+  filter: alpha(opacity=90);
+}
+
+.carousel-indicators {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  z-index: 5;
+  margin: 0;
+  list-style: none;
+}
+
+.carousel-indicators li {
+  display: block;
+  float: left;
+  width: 10px;
+  height: 10px;
+  margin-left: 5px;
+  text-indent: -999px;
+  background-color: #ccc;
+  background-color: rgba(255, 255, 255, 0.25);
+  border-radius: 5px;
+}
+
+.carousel-indicators .active {
+  background-color: #fff;
+}
+
+.carousel-caption {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  padding: 15px;
+  background: #333333;
+  background: rgba(0, 0, 0, 0.75);
+}
+
+.carousel-caption h4,
+.carousel-caption p {
+  line-height: 20px;
+  color: #ffffff;
+}
+
+.carousel-caption h4 {
+  margin: 0 0 5px;
+}
+
+.carousel-caption p {
+  margin-bottom: 0;
+}
