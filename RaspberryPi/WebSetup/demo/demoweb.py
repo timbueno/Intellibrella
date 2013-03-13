@@ -20,7 +20,6 @@
 #
 #
 #
-
 import time
 import codecs
 import os
@@ -38,69 +37,75 @@ def setup():
 			print "Starting..."
 			time.sleep(1)
 			i = i+1
-		return redirect(url_for('demo1'))
+		return redirect(url_for('demo0'))
 
 	return render_template('start.html')
 
-# @app.route('/demo0', methods = ['GET', 'POST'])
-# def demo0():
-# 	if request.method == 'POST':
-# 		save_demo_state('0')
-# 		i = 0
-# 		while(i < 5):
-# 			print "I'm in demo 0"
-# 			time.sleep(3)
-# 			i = i+1
-# 		return redirect(url_for('demo1'))
-# 	return render_template('error0.html')
+@app.route('/demo0', methods = ['GET', 'POST'])
+def demo0():
+	save_demo_state('0')
+	# if request.method == 'POST':
+		# save_demo_state('4')
+		# i = 0
+		# while(i < 5):
+		# 	print "I'm in demo 4"
+		# 	time.sleep(3)
+		# 	i = i+1
+		# return redirect(url_for('demo1'))
+	return render_template('demo0.html')
+
 
 @app.route('/demo1', methods = ['GET', 'POST'])
 def demo1():
-	if request.method == 'POST':
-		save_demo_state('1')
-		i = 0
-		while(i < 5):
-			print "I'm in demo 1"
-			time.sleep(3)
-			i = i+1
-		return redirect(url_for('demo2'))
-	return render_template('error1.html')
+	save_demo_state('1')
+	# if request.method == 'POST':
+		# save_demo_state('1')
+		# i = 0
+		# while(i < 5):
+		# 	print "I'm in demo 1"
+		# 	time.sleep(3)
+		# 	i = i+1
+		# return redirect(url_for('demo2'))
+	return render_template('demo1.html')
 
 @app.route('/demo2', methods = ['GET', 'POST'])
 def demo2():
-	if request.method == 'POST':
-		save_demo_state('2')
-		i = 0
-		while(i < 5):
-			print "I'm in demo2"
-			time.sleep(3)
-			i = i+1
-		return redirect(url_for('demo3'))
-	return render_template('error2.html')
+	save_demo_state('2')
+	# if request.method == 'POST':
+		# save_demo_state('2')
+		# i = 0
+		# while(i < 5):
+		# 	print "I'm in demo2"
+		# 	time.sleep(3)
+		# 	i = i+1
+		# return redirect(url_for('demo3'))
+	return render_template('demo2.html')
 
 @app.route('/demo3', methods = ['GET', 'POST'])
 def demo3():
-	if request.method == 'POST':
-		save_demo_state('3')
-		i = 0
-		while(i < 5):
-			print "I'm in demo3"
-			time.sleep(3)
-			i = i+1
-		return redirect(url_for('demo4'))
-	return render_template('error3.html')
+	save_demo_state('3')
+	# if request.method == 'POST':
+		# save_demo_state('3')
+		# i = 0
+		# while(i < 5):
+		# 	print "I'm in demo3"
+		# 	time.sleep(3)
+		# 	i = i+1
+		# return redirect(url_for('demo4'))
+	return render_template('demo3.html')
 
 @app.route('/demo4', methods = ['GET', 'POST'])
 def demo4():
-	if request.method == 'POST':
-		save_demo_state('4')
-		i = 0
-		while(i < 5):
-			print "I'm in demo 4"
-			time.sleep(3)
-			i = i+1
-		return redirect(url_for('demo1'))
-	return render_template('error4.html')
+	save_demo_state('4')
+	# if request.method == 'POST':
+		# save_demo_state('4')
+		# i = 0
+		# while(i < 5):
+		# 	print "I'm in demo 4"
+		# 	time.sleep(3)
+		# 	i = i+1
+		# return redirect(url_for('demo1'))
+	return render_template('demo4.html')
 
 
 

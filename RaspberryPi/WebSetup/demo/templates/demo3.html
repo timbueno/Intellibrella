@@ -1,67 +1,63 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN">
 <html lang="en">
 <head>
-    <title>Starting Demo</title>
+    <title>It's Thunderstroming!</title>
     <link rel="stylesheet" href="../static/style.css" type="text/css">
     <link rel="stylesheet" href="../static/icn_style.css" type="text/css">
     <link rel="stylesheet" href="../static/animate-custom.css" type="text/css">
     <style>
-    
-    body
-    {
-      background-image:url('../static/img/start.jpg');
-      background-size: 100%;
-    }
+      body
+          {
+            background-image:url('../static/img/heavy.jpg');
+            background-size: 100%;
+          }
 
  
     </style>
 </head>
 <body>
   <div class="content-wrapper">
-      <h1 style="color:black;"><center>
+      <h1><center>
         <div class="bounceIn animated">
-          Enjoy The Intellibrella Demo
+          It's Thunderstroming!
         <div class="glyph">
-          <div class="fs1" aria-hidden="true" data-icon="&#x21;">
+          <div class="fs1" aria-hidden="true" data-icon="&#x37;">
           </div></div></div></center></h1>
 
     <div id="myCarousel" class="carousel slide">
-      <a class="left carousel-control" href="/demo4" data-slide="prev" id="demo4">
+      <a class="left carousel-control" href="/demo2" data-slide="prev">
         <div class="bounceInLeft animated">
-          <div class="glyph">
-          <div class="fs1" aria-hidden="true" data-icon="&#x41;">
-          </div>
-        </div>
-      </div>
-      </a>
-      <a class="right carousel-control" href="/demo1" data-slide="next" id="demo1">
-        <div class="bounceInRight animated">
-          <div class="glyph">
-          <div class="fs1" aria-hidden="true" data-icon="&#x32;">
-          </div>
-        </div>
-      </div>
-      </a>
-      <a class="top carousel-control" href="/demo2" data-slide="next" id="demo2">
-        <div class="bounceInDown animated">
           <div class="glyph">
           <div class="fs1" aria-hidden="true" data-icon="&#x31;">
           </div>
         </div>
       </div>
       </a>
-      <a class="bottom carousel-control" href="/demo3" data-slide="next" id="demo3">
+      <a class="right carousel-control" href="/demo4" data-slide="next" id="demo4">
+        <div class="bounceInRight animated">
+          <div class="glyph">
+          <div class="fs1" aria-hidden="true" data-icon="&#x41;">
+          </div>
+        </div>
+      </div>
+      </a>
+      <a class="top carousel-control" href="/demo0" data-slide="next">
+        <div class="bounceInDown animated">
+          <div class="glyph">
+          <div class="fs1" aria-hidden="true" data-icon="&#x21;">
+          </div>
+        </div>
+      </div>
+      </a>
+      <a class="bottom carousel-control" href="/demo1" data-slide="next">
       <div class="bounceInUp animated">
           <div class="glyph">
-          <div class="fs1" aria-hidden="true" data-icon="&#x37;">
+          <div class="fs1" aria-hidden="true" data-icon="&#x32;">
           </div>
         </div>
       </div>
       </a>
     </div>
-  </div>
-
-
 
 <script>
 
@@ -74,8 +70,8 @@
 //   }
 
 setTimeout(function() {
-    document.getElementById('demo1').click();
-}, 5000);
+    document.getElementById('demo4').click();
+}, 10000);
 
 
 // $(document).ready(function(){
@@ -85,21 +81,30 @@ setTimeout(function() {
 //     });
 //   });
 
-// $('.content-wrapper').animate({
-//             opacity: 0
-//         });
+  $("myCarousel").onclick = function() {
+    $('myCarousel').addClass('bounceOutLeft animated');
+    
+    // $.getJSON($SCRIPT_ROOT + '/_add_numbers', {
+    //     a: $('input[name="sliderval"]').val()
+    //   }),
+
+    return;
+    // alertify.set({ delay: 30000});
+    // alertify.log("Restarting...");
+  };
+
 
 </script>
 
 <script src="../../static/scripts/jquery.js"></script>
 
 <script type="text/javascript">
-$(document).ready(function() 
-{
-    // fade in content.
-    $( '#content-wrapper' ).fadeIn(4000);
-    $( '#content-wrapper' ).fadeOut(4000);   
-});
+// $(document).ready(function() 
+// {
+//     // fade in content.
+//     $( '#content-wrapper' ).fadeIn(4000);
+//     $( '#content-wrapper' ).fadeOut(4000);   
+// });
 // </script>
 
 
