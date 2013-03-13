@@ -117,7 +117,7 @@ def save_demo_state(state_no):
 	configFile = "demo.conf"
 	f = codecs.open(configFile, 'w', 'utf-8')
 
-	f.write('state : ' + str(state_no) + '\n')
+	f.write('status : ' + str(state_no) + '\n')
 
 	f.close()
 
