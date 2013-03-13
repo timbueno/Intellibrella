@@ -76,7 +76,7 @@ h2
   text-align: center;
   font-size: 36px;
   position:absolute;
-  top:86%;
+  top:88%;
   right:0%;
   max-height:100%;
   color: #ffffff;
@@ -134,7 +134,7 @@ h2
 
 .carousel-control.right {
     height: 145px;
-	right: 6%;
+	right: 5%;
 	left: auto;
 	top: 40%;
 }
