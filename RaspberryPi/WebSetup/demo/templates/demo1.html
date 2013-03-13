@@ -3,6 +3,7 @@
 <head>
     <title>Light Rain</title>
     <link rel="stylesheet" href="../static/style.css" type="text/css">
+    <link rel="stylesheet" href="../static/icomoon1705/style.css" type="text/css">
     <link rel="stylesheet" href="../static/icn_style.css" type="text/css">
     <link rel="stylesheet" href="../static/animate-custom.css" type="text/css">
     <style>
@@ -20,7 +21,7 @@
         <div class="bounceIn animated">
           It's Lightly Raining!
         <div class="glyph">
-          <div class="fs1" aria-hidden="true" data-icon="&#x32;">
+          <div class="fs1" style="color:white;" aria-hidden="true" data-icon="&#x32;">
           </div></div></div></center></h1>
 
     <div id="myCarousel" class="carousel slide">
@@ -40,6 +41,7 @@
         </div>
       </div>
       </a>
+      <center>
       <a class="top carousel-control" href="/demo3" data-slide="next">
         <div class="bounceInDown animated">
           <div class="glyph">
@@ -48,14 +50,24 @@
         </div>
       </div>
       </a>
+      </center>
+      <center>
       <a class="bottom carousel-control" href="/demo4" data-slide="next">
       <div class="bounceInUp animated">
           <div class="glyph">
-          <div class="fs1" aria-hidden="true" data-icon="&#x41;">
+          <div class="fs1" aria-hidden="true" dataa-icon="&#xe002;">
           </div>
         </div>
       </div>
       </a>
+    </center>
+          <div class="status">
+        <h2>
+          <div class="bounceIn animated">
+            Green Alert
+            </div>
+        </h2>
+        </div>
     </div>
   </div>
 
@@ -73,7 +85,7 @@
 
 setTimeout(function() {
     document.getElementById('demo2').click();
-}, 10000);
+}, 15000);
 
 
 // $(document).ready(function(){
@@ -89,7 +101,7 @@ setTimeout(function() {
 
 </script>
 
-<script src="../../static/scripts/jquery.js"></script>
+<script src="../static/scripts/jquery.js"></script>
 
 <script type="text/javascript">
 $(document).ready(function() 
