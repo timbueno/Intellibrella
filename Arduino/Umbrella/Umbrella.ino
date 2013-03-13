@@ -54,8 +54,10 @@ void setup() {
   // Initialize the Wireless
   if (!rf22.init()){
     Serial.println("RF22 init failed");
-    led.error(); // Indicate an error on the LEDs
-    software_Reset(); // Reset the unit if wireless doesn't initialize
+    while(1){
+      led.error(); // Indicate an error on the LEDs
+    }
+    // software_Reset(); // Reset the unit if wireless doesn't initialize
   }
   // Initialize clock and set the alarm.
   // Make sure to change the control register in RTC_DS3234.cpp
@@ -344,7 +346,7 @@ void Demo(){
 
   // int q = 0;
   long previousMillis = 0;
-  long checkInterval = 10000;
+  long checkInterval = 5000;
   bool check;
   check = false;
 

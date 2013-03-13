@@ -25,6 +25,7 @@ class LED {
 		void forgotten();
 		void rain();
 		void lightRain();
+		void heavyRain();
 
 		void continueState();
 		void changedLocation();

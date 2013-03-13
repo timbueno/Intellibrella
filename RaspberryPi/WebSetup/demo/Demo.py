@@ -15,10 +15,10 @@ wirelessAPI = PiToArduino()
 
 demomode = 1
 
-if not os.path.exists('/home/pi/Intellibrella/RaspberryPi/WebSetup/demo/demo.lock'):
+if not os.path.exists('/home/pi/Intellibrella/RaspberryPi/WirelessWeather/lock.lock'):
 	# Extract data from save file here...
 	print 'No lock file... opening file...'
-	fileData = readFileData('/home/pi/Intellibrella/RaspberryPi/WebSetup/demo/demo.conf')
+	fileData = readFileData('/home/pi/Intellibrella/RaspberryPi/WirelessWeather/demo.conf')
 	# url = 'US/OH/Cincinnati.json'
 	status = int(fileData['status'])
 
@@ -27,10 +27,10 @@ while 1:
 	print 'Demo Mode Demo Mode'
 	print '=========================='
 
-	if not os.path.exists('/home/pi/Intellibrella/RaspberryPi/WebSetup/demo/demo.lock'):
+	if not os.path.exists('/home/pi/Intellibrella/RaspberryPi/WirelessWeather/lock.lock'):
 		# Extract data from save file here...
 		print 'No lock file... opening file...'
-		fileData = readFileData('/home/pi/Intellibrella/RaspberryPi/WebSetup/demo/demo.conf')
+		fileData = readFileData('/home/pi/Intellibrella/RaspberryPi/WirelessWeather/demo.conf')
 		# url = 'US/OH/Cincinnati.json'
 		status = int(fileData['status'])
 
@@ -51,7 +51,7 @@ while 1:
 	print 'Sending Message: %s' % msg
 	wirelessAPI.sendWireless(msg)
 
-	# time.sleep(1)
+	time.sleep(1)
 
 	# # Build Message to be sent to the umbrella unit
 	# now = calendar.timegm(datetime.now().timetuple())

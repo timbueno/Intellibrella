@@ -164,6 +164,19 @@ void LED::forgotten(){
 }
 
 ////////////////////////////////////////////////////////////////////////////////
+// Heavy Rain LED State
+void LED::heavyRain(){
+	int d = 500;
+
+	blueToggle(HIGH);
+	delay(d);
+	blueToggle(LOW);
+	greenToggle(HIGH);
+	delay(d);
+	greenToggle(LOW);
+}
+
+////////////////////////////////////////////////////////////////////////////////
 // Rain LED State
 void LED::rain(){
 	blueToggle(HIGH);
@@ -228,7 +241,7 @@ void LED::continueState(){
 			rain();
 			break;
 		case 3:
-			rain(); //Change to Heavy rain, will need to create that function
+			heavyRain(); //Change to Heavy rain, will need to create that function
 			break;
 		case 4:
 			forgotten();
