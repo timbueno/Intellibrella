@@ -37,8 +37,8 @@ a {
 h1
 {
   /*display: inline;*/
-  width:800px;
-  height:200px;
+  width:875px;
+  height:300px;
   font-size: 64px;
 
   /* The magic centering code */
@@ -48,7 +48,7 @@ h1
   left:0;right:0; /* Aligns Horizontally - Remove for Vertical Only  */
 
   /* Prevent div from overflowing main window */
-  max-width:100%;
+  max-width:50%;
   max-height:100%;
   overflow:auto;
   color: #ffffff;
@@ -68,6 +68,24 @@ h1 .glyph {
   color: black;
 }
 
+
+h2
+{
+  height: 105px;
+  margin-right: 30px;
+  text-align: center;
+  font-size: 36px;
+  position:absolute;
+  top:88%;
+  right:0%;
+  max-height:100%;
+  color: #ffffff;
+
+}
+.status h2
+{
+  /*vertical-align: center;*/
+}
 
 .carousel {
 /*  position: relative;*/
@@ -94,7 +112,7 @@ h1 .glyph {
   -webkit-border-radius: 23px;
      -moz-border-radius: 23px;
           border-radius: 23px;
-  opacity: 0.5;
+  opacity: 0.3;
   filter: alpha(opacity=50);
 }
 
@@ -116,7 +134,7 @@ h1 .glyph {
 
 .carousel-control.right {
     height: 145px;
-	right: 6%;
+	right: 5%;
 	left: auto;
 	top: 40%;
 }
@@ -124,17 +142,16 @@ h1 .glyph {
 
 .carousel-control.top {
 	height: 165px;
-	top: 22%;
-	left: 47%;
+	top: 2%;
+	width: 98%;
 	/*-webkit-transform:rotate(270deg);*/
-	margin-top: -180px;
 }
 
 
 .carousel-control.bottom {
 	height: 105px;
 	/*top: 50px;*/
-	left: 47%;
+	width: 100%;
 	bottom: 2%;
 /*	-webkit-transform:rotate(90deg);*/
 }

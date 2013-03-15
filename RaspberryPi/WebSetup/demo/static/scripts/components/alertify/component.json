@@ -1,0 +1,14 @@
+{
+  "name": "alertify",
+  "version": "0.3.8",
+  "main": "./alertify.min.js",
+  "dependencies": {},
+  "gitHead": "d027368b428528aeb72e69c69b7f9285fa9b8772",
+  "_id": "alertify@0.3.8",
+  "readme": "ERROR: No README.md file found!",
+  "description": "ERROR: No README.md file found!",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/fabien-d/alertify.js-shim.git"
+  }
+}

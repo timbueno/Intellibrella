@@ -15,6 +15,7 @@
 	content: attr(data-icon);
 	speak: none;
 	font-size: 120px;
+	text-align: center;
 }
 
 /* Use the following CSS code if you want to have a class per icon */
